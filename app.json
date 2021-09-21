@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Orakel",
+    "slug": "orakel-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.geller.orakelapp",
+      "versionCode": 1
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "description": "Mit dieser App hast du dein persönliches Orakel immer dabei. Dieses kann dir sagen, ob du etwas machen sollst, eine Zahl sagen oder ein Datum entscheiden.\nAlle Funktionen sind außerdem intuitiv einstellbar"
+  }
+}
