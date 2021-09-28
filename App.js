@@ -8,6 +8,7 @@ import YesNoIcon from "./components/YesNoIcon";
 import YesNo from "./components/YesNo";
 import Number from "./components/Number";
 import Date from "./components/Date";
+import Counter from "./components/Counter";
 
 const Home = () => {
   return (
@@ -79,6 +80,14 @@ export default () => {
               ),
             }}
             component={Date}
+          />
+
+          <Tab.Screen
+            name="Counter"
+            options={{
+              tabBarLabel: "Counter",
+            }}
+            component={Counter}
           />
         </Tab.Navigator>
       </NavigationContainer>
