@@ -9,20 +9,17 @@ const getTranslateStyle = (position) => ({
 export default (props) => {
   const [height, setHeight] = useState(0);
   const [currentElement, setCurrentElement] = useState(0);
-  const elements = [
-    ...props.elements.map((el, i) => <View key={i}>{el}</View>),
-    <View key={props.elements.length}>{props.elements[0]}</View>,
-  ];
+  const elements = props.elements.map((el, i) => <View key={i}>{el}</View>);
 
-  useEffect(() => {
-    if (currentElement == 0) {
-      setCurrentElement((currentElement + 1) % elements.length);
-    } else {
-      setTimeout(() => {
-        setCurrentElement((currentElement + 1) % elements.length);
-      }, 100);
-    }
-  }, [currentElement]);
+  // useEffect(() => {
+  //   if (currentElement == 0) {
+  //     setCurrentElement((currentElement + 1) % elements.length);
+  //   } else {
+  //     setTimeout(() => {
+  //       setCurrentElement((currentElement + 1) % elements.length);
+  //     }, 4000);
+  //   }
+  // }, [currentElement]);
   return (
     <View
       style={{
@@ -45,20 +42,46 @@ export default (props) => {
 };
 
 class Tick extends React.Component {
-  animation = new Animated.Value(getPosition(0, this.props.height));
+  state = {
+    animation: new Animated.Value(getPosition(0, this.props.height)),
+  };
 
-  componentDidUpdate(prevProps, prevState) {
-    Animated.timing(this.animation, {
-      toValue: getPosition(this.props.value, this.props.height),
-      duration: this.props.value == 0 ? 0 : 100,
-      useNativeDriver: true,
-    }).start();
+  componentDidMount() {
+    console.log("MOUNTING");
+    this.restartAnimation();
+  }
+
+  componentDidUpdate() {
+    console.log("Updated");
+  }
+
+  restartAnimation() {
+    this.setState(
+      {
+        animation: new Animated.Value(getPosition(0, this.props.height)),
+      },
+      () => {
+        Animated.timing(this.state.animation, {
+          toValue: getPosition(
+            this.props.elements.length - 1,
+            this.props.height
+          ),
+          duration: this.props.elements.length * 200,
+          useNativeDriver: true,
+        }).start(({ finished }) => {
+          if (finished) {
+            //This would rerun the animation again
+            //this.restartAnimation();
+          }
+        });
+      }
+    );
   }
 
   render() {
     const { elements, value, height } = this.props;
     if (value == null) return null;
-    const translation = getTranslateStyle(this.animation);
+    const translation = getTranslateStyle(this.state.animation);
     return <Animated.View style={translation}>{elements}</Animated.View>;
   }
 }

@@ -98,9 +98,11 @@ export default () => {
 const CustomCounter = () => {
   return (
     <Counter
-      elements={["Ja", "Nein"].map((x, i) => (
-        <Text style={{ fontSize: 50 }}>{x}</Text>
-      ))}
+      elements={["Ja", "Nein", "Vielleicht", "Bestimmt", "Sicher"].map(
+        (x, i) => (
+          <Text style={{ fontSize: 50 }}>{x}</Text>
+        )
+      )}
     />
   );
 };
