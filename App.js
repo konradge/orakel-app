@@ -87,10 +87,20 @@ export default () => {
             options={{
               tabBarLabel: "Counter",
             }}
-            component={Counter}
+            component={CustomCounter}
           />
         </Tab.Navigator>
       </NavigationContainer>
     </View>
+  );
+};
+
+const CustomCounter = () => {
+  return (
+    <Counter
+      elements={["Ja", "Nein"].map((x, i) => (
+        <Text style={{ fontSize: 50 }}>{x}</Text>
+      ))}
+    />
   );
 };
