@@ -8,6 +8,7 @@ import YesNoIcon from "./components/YesNoIcon";
 import YesNo from "./components/YesNo";
 import Number from "./components/Number";
 import Date from "./components/Date";
+import Counter from "./components/Counter";
 
 const Home = () => {
   return (
@@ -80,8 +81,28 @@ export default () => {
             }}
             component={Date}
           />
+
+          <Tab.Screen
+            name="Counter"
+            options={{
+              tabBarLabel: "Counter",
+            }}
+            component={CustomCounter}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </View>
+  );
+};
+
+const CustomCounter = () => {
+  return (
+    <Counter
+      elements={["Ja", "Nein", "Vielleicht", "Bestimmt", "Sicher"].map(
+        (x, i) => (
+          <Text style={{ fontSize: 50 }}>{x}</Text>
+        )
+      )}
+    />
   );
 };

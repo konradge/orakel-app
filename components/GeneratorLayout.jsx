@@ -33,12 +33,6 @@ export default ({
             if (onGenerateButtonPress) onGenerateButtonPress();
             const selectedIndex = generatorFunction();
             setLoading(true);
-            console.log("Loading set");
-            rotate(outputComponents, setCurrentElement, selectedIndex, () => {
-              console.log("OnLeave!!!!!!!!!!");
-              setLoading(false);
-            });
-            console.log("Leave onPress");
           }}
           disabled={generateButtonDisabled || loading}
         />
@@ -51,7 +45,13 @@ export default ({
           borderWidth: 2,
         }}
       >
-        {getOutput(currentElement, loading)}
+        {
+          <Randomizer
+            components={outputComponents}
+            startIndex={0}
+            endIndex={0}
+          />
+        }
       </View>
     </View>
   );
