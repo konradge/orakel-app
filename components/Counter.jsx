@@ -28,12 +28,23 @@ export default (props) => {
         alignItems: "center",
       }}
     >
-      <View style={{ overflow: "hidden", flexDirection: "row", height }}>
+      <View
+        style={{
+          overflow: "hidden",
+          flexDirection: "row",
+          height,
+          borderColor: "red",
+          borderWidth: 1,
+        }}
+      >
         <Tick elements={elements} value={currentElement} height={height} />
       </View>
       <Text
         style={{ fontSize: 50, opacity: 0 }}
-        onLayout={(e) => setHeight(e.nativeEvent.layout.height)}
+        onLayout={(e) => {
+          console.log(e.nativeEvent.layout.height);
+          setHeight(e.nativeEvent.layout.height);
+        }}
       >
         0
       </Text>
@@ -43,25 +54,22 @@ export default (props) => {
 
 class Tick extends React.Component {
   state = {
-    animation: new Animated.Value(getPosition(0, this.props.height)),
+    animationRunning: false,
   };
-
-  componentDidMount() {
-    console.log("MOUNTING");
-    this.restartAnimation();
-  }
+  animation = new Animated.Value(getPosition(0, this.props.height));
 
   componentDidUpdate() {
-    console.log("Updated");
+    if (!this.state.animationRunning && this.props.height !== 0)
+      this.restartAnimation();
   }
 
   restartAnimation() {
     this.setState(
       {
-        animation: new Animated.Value(getPosition(0, this.props.height)),
+        animationRunning: true,
       },
       () => {
-        Animated.timing(this.state.animation, {
+        Animated.timing(this.animation.setValue(0), {
           toValue: getPosition(
             this.props.elements.length - 1,
             this.props.height
@@ -81,7 +89,7 @@ class Tick extends React.Component {
   render() {
     const { elements, value, height } = this.props;
     if (value == null) return null;
-    const translation = getTranslateStyle(this.state.animation);
+    const translation = getTranslateStyle(this.animation);
     return <Animated.View style={translation}>{elements}</Animated.View>;
   }
 }
