@@ -1,6 +1,6 @@
 import dateFormat from "dateformat";
 import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { addDay, generateNumber } from "../helpers";
 import DatePicker from "./DatePicker";
 import GeneratorLayout from "./GeneratorLayout";
@@ -44,10 +44,8 @@ export default () => {
         })
         .map((o) => (
           <View>
-            <Text style={{ fontSize: 70, alignSelf: "center" }}>
-              {o.weekday}
-            </Text>
-            <Text style={{ fontSize: 50 }}>{o.date}</Text>
+            <Text style={styles.weekdayText}>{o.weekday}</Text>
+            <Text style={styles.dateText}>{o.date}</Text>
           </View>
         ))}
     />
@@ -66,3 +64,8 @@ const generateAllDates = (start, end) => {
   }
   return allDates;
 };
+
+const styles = StyleSheet.create({
+  weekdayText: { fontSize: 70, alignSelf: "center" },
+  dateText: { fontSize: 50 },
+});

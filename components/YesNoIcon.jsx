@@ -1,16 +1,10 @@
 import React from "react";
-import { Text } from "react-native";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Icon } from "react-native-elements";
 
 export default ({ active }) => {
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignSelf: "flex-start",
-      }}
-    >
+    <View style={styles.container}>
       <Icon
         name="thumbs-up-outline"
         type="ionicon"
@@ -24,3 +18,10 @@ export default ({ active }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignSelf: "flex-start",
+  },
+});

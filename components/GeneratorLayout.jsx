@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 import { rotate } from "../helpers";
 import Randomizer from "./Randomizer";
@@ -14,16 +14,8 @@ export default ({
   const [loading, setLoading] = useState(false);
   const [currentElement, setCurrentElement] = useState(null);
   return (
-    <View style={{ flex: 1, borderWidth: 2, borderColor: "red" }}>
-      <View
-        style={{
-          flex: 4,
-          alignItems: "center",
-          justifyContent: "center",
-          borderWidth: 2,
-          borderColor: "green",
-        }}
-      >
+    <View style={styles.container}>
+      <View style={styles.top}>
         {selection}
         <Button
           title="Generate"
@@ -37,14 +29,7 @@ export default ({
           disabled={generateButtonDisabled || loading}
         />
       </View>
-      <View
-        style={{
-          flex: 3,
-          alignItems: "center",
-          justifyContent: "center",
-          borderWidth: 2,
-        }}
-      >
+      <View style={styles.bottom}>
         {
           <Randomizer
             components={outputComponents}
@@ -57,8 +42,19 @@ export default ({
   );
 };
 
-const getOutput = (currentElement, loading) => {
-  console.log("Loading is ", loading);
-  if (loading) return <View style={{ opacity: 0.5 }}>{currentElement}</View>;
-  return currentElement;
-};
+const styles = StyleSheet.create({
+  container: { flex: 1, borderWidth: 2, borderColor: "red" },
+  top: {
+    flex: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "green",
+  },
+  bottom: {
+    flex: 3,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+  },
+});

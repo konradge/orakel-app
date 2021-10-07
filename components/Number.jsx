@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { Input } from "react-native-elements";
-import { Button } from "react-native-elements";
 import { isNumber } from "../helpers";
 import GeneratorLayout from "./GeneratorLayout";
 
@@ -39,32 +38,25 @@ export default () => {
     <GeneratorLayout
       selection={
         <View>
-          <View
-            style={{
-              flexDirection: "row",
-              borderWidth: 2,
-              width: "100%",
-              justifyContent: "space-between",
-            }}
-          >
-            <View style={{ width: "47%" }}>
+          <View style={styles.inputContainer}>
+            <View style={styles.inputPartsContainer}>
               <Input
                 onChangeText={setMinValue}
                 value={minValue}
                 placeholder="MIN"
                 keyboardType="numeric"
-                inputStyle={{ width: "40%", fontSize: 50 }}
+                inputStyle={styles.input}
                 errorMessage={minError}
               />
             </View>
-            <Text style={{ fontSize: 30 }}>-</Text>
-            <View style={{ width: "47%" }}>
+            <Text style={styles.inputSeperator}>-</Text>
+            <View style={styles.inputContainer}>
               <Input
                 onChangeText={setMaxValue}
                 value={maxValue}
                 placeholder="MAX"
                 keyboardType="numeric"
-                inputStyle={{ width: "40%", fontSize: 50 }}
+                inputStyle={styles.input}
                 errorMessage={maxError}
               />
             </View>
@@ -80,8 +72,21 @@ export default () => {
       outputComponents={Array.from(
         new Array(Number(maxValue) - Number(minValue) + 1)
       ).map((_, i) => (
-        <Text style={{ fontSize: 100 }}>{i + Number(minValue)}</Text>
+        <Text style={styles.bigText}>{i + Number(minValue)}</Text>
       ))}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  inputPartsContainer: { width: "47%" },
+  input: { width: "40%", fontSize: 50 },
+  inputSeperator: { fontSize: 30 },
+  inputContainer: {
+    flexDirection: "row",
+    borderWidth: 2,
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  bigText: { fontSize: 100 },
+});

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
@@ -10,29 +10,10 @@ import Number from "./components/Number";
 import Date from "./components/Date";
 import Counter from "./components/Counter";
 
-const Home = () => {
-  return (
-    <View>
-      <Text>Über dem Rowing...</Text>
-      <Icon name="rowing" />
-      <Text>Unter dem Rowing</Text>
-      <YesNoIcon />
-    </View>
-  );
-};
-
-const Home2 = () => {
-  return (
-    <View>
-      <Text>Home 2</Text>
-    </View>
-  );
-};
-
 export default () => {
   const Tab = createBottomTabNavigator();
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.wrapper}>
       <NavigationContainer
         tabBarOptions={{
           activeTintColor: "#e91e63",
@@ -44,7 +25,7 @@ export default () => {
             options={{
               tabBarLabel: "Yes/No",
               tabBarIcon: ({ focused }) => (
-                <View style={{ alignItems: "center" }}>
+                <View style={styles.centeredView}>
                   <YesNoIcon active={focused} />
                 </View>
               ),
@@ -100,9 +81,15 @@ const CustomCounter = () => {
     <Counter
       elements={["Ja", "Nein", "Vielleicht", "Bestimmt", "Sicher"].map(
         (x, i) => (
-          <Text style={{ fontSize: 50 }}>{x}</Text>
+          <Text style={styles.text}>{x}</Text>
         )
       )}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: { flex: 1 },
+  centeredView: { alignItems: "center" },
+  text: { fontSize: 50 },
+});

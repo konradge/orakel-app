@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import { sleep } from "../helpers";
 import Counter from "./Counter";
 
 export default ({ components }) => {

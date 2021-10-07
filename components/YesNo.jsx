@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { View, Text } from "react-native";
-import { Slider, Button } from "react-native-elements";
+import { View, Text, StyleSheet } from "react-native";
 import GeneratorLayout from "./GeneratorLayout";
 import SliderWithButtons from "./SliderWithButtons";
 
@@ -17,27 +16,15 @@ export default () => {
   return (
     <GeneratorLayout
       selection={
-        <View style={{ width: "100%", flexDirection: "row" }}>
-          <View
-            style={{
-              width: "20%",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={{ fontSize: 30, color: "green" }}>Ja</Text>
+        <View style={styles.selectionContainer}>
+          <View style={styles.yesNoContainer}>
+            <Text style={styles.yesText}>Ja</Text>
           </View>
-          <View style={{ width: "60%" }}>
+          <View style={styles.sliderContainer}>
             <SliderWithButtons onValueChange={setSliderValue} />
           </View>
-          <View
-            style={{
-              width: "20%",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={{ fontSize: 30, color: "red" }}>Nein</Text>
+          <View style={styles.yesNoContainer}>
+            <Text style={styles.noText}>Nein</Text>
           </View>
         </View>
       }
@@ -49,8 +36,25 @@ export default () => {
 
 generateOutputComponent = (value, index) => {
   return (
-    <Text style={{ color: index == 1 ? "green" : "red", fontSize: 100 }}>
+    <Text
+      style={[index == 1 ? styles.greenText : styles.redText, styles.bigText]}
+    >
       {value}
     </Text>
   );
 };
+
+const styles = StyleSheet.create({
+  selectionContainer: { width: "100%", flexDirection: "row" },
+  yesNoContainer: {
+    width: "20%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  yesText: { fontSize: 30, color: "green" },
+  noText: { fontSize: 30, color: "red" },
+  bigText: { fontSize: 100 },
+  redText: { color: "red" },
+  greenText: { color: "green" },
+  sliderContainer: { width: "60%" },
+});

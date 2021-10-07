@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Animated } from "react-native";
+import { Text, View, Animated, StyleSheet } from "react-native";
 
 const getPosition = (value, height) => parseInt(value, 10) * height * -1;
 const getTranslateStyle = (position) => ({
@@ -21,26 +21,12 @@ export default (props) => {
   //   }
   // }, [currentElement]);
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <View
-        style={{
-          overflow: "hidden",
-          flexDirection: "row",
-          height,
-          borderColor: "red",
-          borderWidth: 1,
-        }}
-      >
+    <View style={styles.container}>
+      <View style={[styles.hideContainer, { height }]}>
         <Tick elements={elements} value={currentElement} height={height} />
       </View>
       <Text
-        style={{ fontSize: 50, opacity: 0 }}
+        style={styles.measurement}
         onLayout={(e) => {
           console.log(e.nativeEvent.layout.height);
           setHeight(e.nativeEvent.layout.height);
@@ -69,7 +55,7 @@ class Tick extends React.Component {
         animationRunning: true,
       },
       () => {
-        Animated.timing(this.animation.setValue(0), {
+        Animated.timing(this.animation, {
           toValue: getPosition(
             this.props.elements.length - 1,
             this.props.height
@@ -79,6 +65,7 @@ class Tick extends React.Component {
         }).start(({ finished }) => {
           if (finished) {
             //This would rerun the animation again
+            //Needs some reseting of this.animation
             //this.restartAnimation();
           }
         });
@@ -93,3 +80,18 @@ class Tick extends React.Component {
     return <Animated.View style={translation}>{elements}</Animated.View>;
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  hideContainer: {
+    overflow: "hidden",
+    flexDirection: "row",
+    borderColor: "red",
+    borderWidth: 1,
+  },
+  measurement: { fontSize: 50, opacity: 0 },
+});
