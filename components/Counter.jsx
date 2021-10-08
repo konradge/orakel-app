@@ -1,85 +1,60 @@
-import React, { useEffect, useState } from "react";
-import { Text, View, Animated, StyleSheet } from "react-native";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useResize,
+  useLayoutEffect,
+} from "react";
+import { View, StyleSheet, Text, Dimensions } from "react-native";
+import Tick from "./Tick";
 
-const getPosition = (value, height) => parseInt(value, 10) * height * -1;
-const getTranslateStyle = (position) => ({
-  transform: [{ translateY: position }],
-});
-
-export default (props) => {
+const Counter = (props) => {
   const [height, setHeight] = useState(0);
-  const [currentElement, setCurrentElement] = useState(0);
-  const elements = props.elements.map((el, i) => <View key={i}>{el}</View>);
 
-  // useEffect(() => {
-  //   if (currentElement == 0) {
-  //     setCurrentElement((currentElement + 1) % elements.length);
-  //   } else {
-  //     setTimeout(() => {
-  //       setCurrentElement((currentElement + 1) % elements.length);
-  //     }, 4000);
-  //   }
-  // }, [currentElement]);
+  const elements = props.elements.map((el, i) => {
+    return (
+      <Element
+        key={i}
+        getWidth={(w) => {
+          let newWidths = { ...widths };
+          console.log("i: ", i);
+          newWidths[i] = w;
+          setWidths(newWidths);
+        }}
+      >
+        {el}
+      </Element>
+    );
+  });
+
   return (
     <View style={styles.container}>
       <View style={[styles.hideContainer, { height }]}>
-        <Tick elements={elements} value={currentElement} height={height} />
+        <Tick elements={elements} height={height} />
       </View>
-      <Text
+      <View
         style={styles.measurement}
         onLayout={(e) => {
-          console.log(e.nativeEvent.layout.height);
           setHeight(e.nativeEvent.layout.height);
         }}
       >
-        0
-      </Text>
+        <View>{props.allComponents[0]}</View>
+      </View>
     </View>
   );
 };
 
-class Tick extends React.Component {
-  state = {
-    animationRunning: false,
-  };
-  animation = new Animated.Value(getPosition(0, this.props.height));
+export default Counter;
 
-  componentDidUpdate() {
-    if (!this.state.animationRunning && this.props.height !== 0)
-      this.restartAnimation();
-  }
-
-  restartAnimation() {
-    this.setState(
-      {
-        animationRunning: true,
-      },
-      () => {
-        Animated.timing(this.animation, {
-          toValue: getPosition(
-            this.props.elements.length - 1,
-            this.props.height
-          ),
-          duration: this.props.elements.length * 200,
-          useNativeDriver: true,
-        }).start(({ finished }) => {
-          if (finished) {
-            //This would rerun the animation again
-            //Needs some reseting of this.animation
-            //this.restartAnimation();
-          }
-        });
-      }
-    );
-  }
-
-  render() {
-    const { elements, value, height } = this.props;
-    if (value == null) return null;
-    const translation = getTranslateStyle(this.animation);
-    return <Animated.View style={translation}>{elements}</Animated.View>;
-  }
-}
+const Element = (props) => {
+  return (
+    <View
+      style={{ width: Dimensions.get("window").width, alignItems: "center" }}
+    >
+      {props.children}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -90,8 +65,6 @@ const styles = StyleSheet.create({
   hideContainer: {
     overflow: "hidden",
     flexDirection: "row",
-    borderColor: "red",
-    borderWidth: 1,
   },
-  measurement: { fontSize: 50, opacity: 0 },
+  measurement: { opacity: 0 },
 });

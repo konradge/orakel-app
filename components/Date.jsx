@@ -53,13 +53,10 @@ export default () => {
 };
 
 const generateAllDates = (start, end) => {
-  console.log("Generating all days!", start, end);
   if (start == null || end == null) return [];
   const endDate = new Date(end);
   let allDates = [new Date(start).getTime()];
-  console.log(allDates);
   while (allDates[allDates.length - 1] < endDate) {
-    console.log(allDates);
     allDates.push(addDay(allDates[allDates.length - 1]));
   }
   return allDates;

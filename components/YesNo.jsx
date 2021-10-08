@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 import GeneratorLayout from "./GeneratorLayout";
 import SliderWithButtons from "./SliderWithButtons";
 
-export default () => {
+const YesNo = (props) => {
   const answerText = ["NEIN", "JA"];
   const [sliderValue, setSliderValue] = useState(0.5);
   const generateAnswer = () => {
@@ -43,6 +44,8 @@ generateOutputComponent = (value, index) => {
     </Text>
   );
 };
+
+export default YesNo;
 
 const styles = StyleSheet.create({
   selectionContainer: { width: "100%", flexDirection: "row" },

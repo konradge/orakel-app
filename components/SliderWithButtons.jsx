@@ -7,7 +7,6 @@ import { getColor } from "../helpers";
 export default ({ onValueChange }) => {
   const [value, setValue] = useState(0.5);
   useEffect(() => {
-    console.log(value);
     onValueChange(value);
   }, [value]);
   return (
@@ -25,7 +24,6 @@ export default ({ onValueChange }) => {
         style={styles.slider}
         value={value}
         onValueChange={(value) => {
-          console.log(value);
           setValue(value);
         }}
       />

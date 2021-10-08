@@ -20,7 +20,6 @@ export const sleep = async (time) =>
 export const addDay = (oldDate, dayNumber = 1) => {
   let date = new Date(oldDate);
   date.setDate(date.getDate() + dayNumber);
-  console.log(date);
   return new Date(date);
 };
 
@@ -34,7 +33,6 @@ export const rotate = async (
   intervalMin = 30,
   intervalMax = 60
 ) => {
-  console.log("The goal is: ", goalIndex);
   const duration = generateNumber(durationMin, durationMax);
   let intervalArray = [];
   while (intervalArray.reduce((x, y) => x + y, 0) < duration) {
@@ -48,5 +46,4 @@ export const rotate = async (
   }
   onUpdate(inputArray[start]);
   onFinish(inputArray[start]);
-  console.log("Should be true: ", start == goalIndex);
 };

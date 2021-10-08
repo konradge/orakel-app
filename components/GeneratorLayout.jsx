@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
+import { connect } from "react-redux";
+import { requestSpinning, setEndIndex } from "../actions/spinnerActions";
 import { rotate } from "../helpers";
 import Randomizer from "./Randomizer";
 
-export default ({
-  selection,
-  outputComponents,
-  onGenerateButtonPress,
-  generateButtonDisabled,
-  generatorFunction,
-}) => {
-  const [loading, setLoading] = useState(false);
-  const [currentElement, setCurrentElement] = useState(null);
+const GeneratorLayout = (props) => {
+  const {
+    selection,
+    outputComponents,
+    onGenerateButtonPress,
+    generateButtonDisabled,
+    generatorFunction,
+  } = props;
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -23,38 +24,40 @@ export default ({
           titleStyle={{ fontSize: 50 }}
           onPress={() => {
             if (onGenerateButtonPress) onGenerateButtonPress();
-            const selectedIndex = generatorFunction();
-            setLoading(true);
+            props.requestSpinning();
+            props.setEndIndex(generatorFunction());
           }}
-          disabled={generateButtonDisabled || loading}
+          disabled={generateButtonDisabled || props.spinner.currentlySpinning}
         />
       </View>
       <View style={styles.bottom}>
-        {
-          <Randomizer
-            components={outputComponents}
-            startIndex={0}
-            endIndex={0}
-          />
-        }
+        {<Randomizer components={outputComponents} />}
       </View>
     </View>
   );
 };
 
+const mapDispatchToProps = (dispatch) => ({
+  requestSpinning: () => dispatch(requestSpinning()),
+  setEndIndex: (i) => dispatch(setEndIndex(i)),
+});
+
+const mapStateToProps = (state) => ({
+  spinner: state.spinner,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(GeneratorLayout);
+
 const styles = StyleSheet.create({
-  container: { flex: 1, borderWidth: 2, borderColor: "red" },
+  container: { flex: 1 },
   top: {
     flex: 4,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 2,
-    borderColor: "green",
   },
   bottom: {
     flex: 3,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 2,
   },
 });

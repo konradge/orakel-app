@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
   inputSeperator: { fontSize: 30 },
   inputContainer: {
     flexDirection: "row",
-    borderWidth: 2,
     width: "100%",
     justifyContent: "space-between",
   },
