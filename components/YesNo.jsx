@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { connect } from "react-redux";
 import GeneratorLayout from "./GeneratorLayout";
 import SliderWithButtons from "./SliderWithButtons";
 
 const YesNo = (props) => {
-  const answerText = ["NEIN", "JA"];
   const [sliderValue, setSliderValue] = useState(0.5);
   const generateAnswer = () => {
     if (Math.random() < sliderValue) {
@@ -30,7 +28,7 @@ const YesNo = (props) => {
         </View>
       }
       generatorFunction={generateAnswer}
-      outputComponents={["No", "Yes"].map(generateOutputComponent)}
+      outputComponents={["Nein", "Ja"].map(generateOutputComponent)}
     />
   );
 };

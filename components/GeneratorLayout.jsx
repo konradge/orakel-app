@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
-import { connect } from "react-redux";
-import { requestSpinning, setEndIndex } from "../actions/spinnerActions";
-import { rotate } from "../helpers";
-import Randomizer from "./Randomizer";
+import Spinner from "./Spinner/Spinner";
 
 const GeneratorLayout = (props) => {
   const {
     selection,
-    outputComponents,
     onGenerateButtonPress,
     generateButtonDisabled,
     generatorFunction,
   } = props;
+
+  const spinnerRef = useRef(null);
+
+  const [elements, setElements] = useState([props.outputComponents[0]]);
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(0);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  useEffect(() => {
+    spinnerRef.current.restart();
+  }, [elements]);
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -24,29 +30,59 @@ const GeneratorLayout = (props) => {
           titleStyle={{ fontSize: 50 }}
           onPress={() => {
             if (onGenerateButtonPress) onGenerateButtonPress();
-            props.requestSpinning();
-            props.setEndIndex(generatorFunction());
+            setButtonDisabled(true);
+            setElements(
+              getRandomComponents(props.outputComponents, startIndex, endIndex)
+            );
           }}
-          disabled={generateButtonDisabled || props.spinner.currentlySpinning}
+          disabled={generateButtonDisabled || buttonDisabled}
         />
       </View>
       <View style={styles.bottom}>
-        {<Randomizer components={outputComponents} />}
+        {
+          <Spinner
+            elements={elements}
+            ref={spinnerRef}
+            onAnimationEnd={() => {
+              setButtonDisabled(false);
+              setStartIndex(endIndex);
+              setEndIndex(generatorFunction());
+            }}
+          />
+        }
       </View>
     </View>
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  requestSpinning: () => dispatch(requestSpinning()),
-  setEndIndex: (i) => dispatch(setEndIndex(i)),
-});
+const getRandomComponents = (
+  components,
+  startIndex,
+  endIndex,
+  avgDurationPerFrame = 100,
+  totalDuration = 1500
+) => {
+  if (endIndex == null) return [components[startIndex]];
+  let newComponents = [];
+  if (startIndex < endIndex) {
+    newComponents = components.slice(startIndex, endIndex + 1);
+  } else {
+    newComponents = [
+      ...components.slice(startIndex, components.length),
+      ...components.slice(0, endIndex + 1),
+    ];
+  }
+  while (newComponents.length < totalDuration / avgDurationPerFrame) {
+    newComponents = [
+      ...components.slice(startIndex, components.length),
+      ...components.slice(0, startIndex),
+      ...newComponents,
+    ];
+  }
+  return [...newComponents];
+};
 
-const mapStateToProps = (state) => ({
-  spinner: state.spinner,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(GeneratorLayout);
+export default GeneratorLayout;
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
