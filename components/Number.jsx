@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { Dimensions, StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { Input } from "react-native-elements";
 import { isNumber } from "../helpers";
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   inputSeperator: { fontSize: 30 },
   inputContainer: {
     flexDirection: "row",
-    width: "100%",
+    width: Dimensions.get("window").width,
     justifyContent: "space-between",
   },
   bigText: { fontSize: 100 },
