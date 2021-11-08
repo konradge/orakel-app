@@ -11,6 +11,12 @@ class Tick extends React.Component {
     animation: new Animated.Value(getPosition(0, this.props.height)),
   };
 
+  resetAnimation() {
+    this.setState({
+      animation: new Animated.Value(getPosition(0, this.props.height)),
+    });
+  }
+
   restartAnimation() {
     this.setState(
       {

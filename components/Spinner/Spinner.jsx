@@ -21,6 +21,14 @@ class Spinner extends React.Component {
     this.tickRef = React.createRef();
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.elements !== prevProps.elements) {
+      this.setState({ elements: this.mapElements(this.props.elements) }, () =>
+        this.tickRef.current.resetAnimation()
+      );
+    }
+  }
+
   mapElements(elems) {
     return elems.map((el, i) => {
       return <Element key={i}>{el}</Element>;

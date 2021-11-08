@@ -8,6 +8,7 @@ import YesNoIcon from "./components/YesNoIcon";
 import YesNo from "./components/YesNo";
 import Number from "./components/Number";
 import Date from "./components/Date";
+import Custom from "./components/Custom";
 
 export default () => {
   const Tab = createBottomTabNavigator();
@@ -20,9 +21,9 @@ export default () => {
       >
         <Tab.Navigator>
           <Tab.Screen
-            name="YesNo"
+            name="JaNein"
             options={{
-              tabBarLabel: "Yes/No",
+              tabBarLabel: "Ja/Nein",
               tabBarIcon: ({ focused }) => (
                 <View style={styles.centeredView}>
                   <YesNoIcon active={focused} />
@@ -32,9 +33,9 @@ export default () => {
             component={YesNo}
           />
           <Tab.Screen
-            name="Number"
+            name="Zahl"
             options={{
-              tabBarLabel: "Number",
+              tabBarLabel: "Zahl",
               tabBarIcon: ({ focused }) => (
                 <Icon
                   name="cube-outline"
@@ -48,9 +49,9 @@ export default () => {
           />
 
           <Tab.Screen
-            name="Date"
+            name="Datum"
             options={{
-              tabBarLabel: "Date",
+              tabBarLabel: "Datum",
               tabBarIcon: ({ focused }) => (
                 <Icon
                   name="calendar-outline"
@@ -60,6 +61,21 @@ export default () => {
               ),
             }}
             component={Date}
+          />
+
+          <Tab.Screen
+            name="Eigene"
+            options={{
+              tabBarLabel: "Eigene",
+              tabBarIcon: ({ focused }) => (
+                <Icon
+                  name="pencil-outline"
+                  type="ionicon"
+                  color={focused ? "blue" : "gray"}
+                />
+              ),
+            }}
+            component={Custom}
           />
         </Tab.Navigator>
       </NavigationContainer>

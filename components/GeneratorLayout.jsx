@@ -10,9 +10,7 @@ const GeneratorLayout = (props) => {
     generateButtonDisabled,
     generatorFunction,
   } = props;
-
   const spinnerRef = useRef(null);
-
   const [elements, setElements] = useState([props.outputComponents[0]]);
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(0);
@@ -20,6 +18,10 @@ const GeneratorLayout = (props) => {
   useEffect(() => {
     spinnerRef.current.restart();
   }, [elements]);
+  useEffect(() => {
+    setElements([props.outputComponents[0]]);
+    setStartIndex(0);
+  }, [props.outputComponents]);
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -30,12 +32,23 @@ const GeneratorLayout = (props) => {
           titleStyle={{ fontSize: 50 }}
           onPress={() => {
             if (onGenerateButtonPress) onGenerateButtonPress();
+            const newEndIndex = generatorFunction();
             setButtonDisabled(true);
+            console.log("Start index is " + startIndex);
             setElements(
-              getRandomComponents(props.outputComponents, startIndex, endIndex)
+              getRandomComponents(
+                props.outputComponents,
+                startIndex,
+                newEndIndex
+              )
             );
+            setEndIndex(newEndIndex);
           }}
-          disabled={generateButtonDisabled || buttonDisabled}
+          disabled={
+            generateButtonDisabled ||
+            buttonDisabled ||
+            props.outputComponents.length == 0
+          }
         />
       </View>
       <View style={styles.bottom}>
@@ -44,9 +57,10 @@ const GeneratorLayout = (props) => {
             elements={elements}
             ref={spinnerRef}
             onAnimationEnd={() => {
+              console.log("ANIMATION ENDED");
               setButtonDisabled(false);
               setStartIndex(endIndex);
-              setEndIndex(generatorFunction());
+              setEndIndex(endIndex);
             }}
           />
         }
