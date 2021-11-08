@@ -15,12 +15,16 @@ const GeneratorLayout = (props) => {
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(0);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+
+  const [shouldNotCallOnAnimationEnd, setShouldNotCallOnAnimationEnd] =
+    useState(false);
   useEffect(() => {
     spinnerRef.current.restart();
   }, [elements]);
   useEffect(() => {
     setElements([props.outputComponents[0]]);
     setStartIndex(0);
+    setShouldNotCallOnAnimationEnd(true);
   }, [props.outputComponents]);
   return (
     <View style={styles.container}>
@@ -57,10 +61,13 @@ const GeneratorLayout = (props) => {
             elements={elements}
             ref={spinnerRef}
             onAnimationEnd={() => {
-              console.log("ANIMATION ENDED");
-              setButtonDisabled(false);
-              setStartIndex(endIndex);
-              setEndIndex(endIndex);
+              if (shouldNotCallOnAnimationEnd) {
+                setShouldNotCallOnAnimationEnd(false);
+              } else {
+                setButtonDisabled(false);
+                setStartIndex(endIndex);
+                setEndIndex(endIndex);
+              }
             }}
           />
         }
