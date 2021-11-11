@@ -1,8 +1,5 @@
-export const defaultListNames = ["Jahreszeiten", "Gerichte", "Buchstaben"].map(
-  (name) => ({ title: name, id: name.toLowerCase() })
-);
-
-export const defaultListValues = {
+// Get them with getData("custom_lists") || defaultLists
+export const defaultLists = {
   jahreszeiten: [
     "Januar",
     "Februar",

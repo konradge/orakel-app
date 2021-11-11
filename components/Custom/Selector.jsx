@@ -9,10 +9,15 @@ import {
   FlatList,
 } from "react-native";
 import { Icon } from "react-native-elements";
+import { capitalizeFirstLetter } from "../../helpers";
 import FeedbackPressable from "../FeedbackPressable";
 
 export default class SpinningSelector extends React.Component {
-  state = { selected: 0, opened: false, layout: { width: 0 } };
+  state = {
+    selectedList: this.props.selectedList,
+    opened: false,
+    layout: { width: 0 },
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -24,7 +29,14 @@ export default class SpinningSelector extends React.Component {
             this.setState({ opened: false });
           }}
         >
-          <View style={{ flex: 1, justifyContent: "center" }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              borderColor: "green",
+              borderWidth: 3,
+            }}
+          >
             <View
               style={styles.modalView}
               onLayout={(event) =>
@@ -32,8 +44,8 @@ export default class SpinningSelector extends React.Component {
               }
             >
               <FlatList
-                data={this.props.items}
-                renderItem={({ item, index }) => (
+                data={this.props.listNames}
+                renderItem={({ item }) => (
                   <View style={{ borderColor: "red", borderWidth: 1 }}>
                     <View
                       style={{
@@ -49,13 +61,16 @@ export default class SpinningSelector extends React.Component {
                       <View style={{ justifyContent: "flex-start" }}>
                         <FeedbackPressable
                           onPress={() => {
-                            this.setState({ selected: index, opened: false });
+                            this.setState({
+                              selectedList: item,
+                              opened: false,
+                            });
                             if (this.props.onSelect) {
-                              this.props.onSelect(item.id);
+                              this.props.onSelect(item);
                             }
                           }}
                         >
-                          <Text style={{ fontSize: 30 }}>{item.title}</Text>
+                          <Text style={{ fontSize: 30 }}>{item}</Text>
                         </FeedbackPressable>
                       </View>
                       <View
@@ -65,13 +80,13 @@ export default class SpinningSelector extends React.Component {
                           name="pencil"
                           type="evilicon"
                           size={50}
-                          onPress={() => this.props.onEditPress(item.id)}
+                          onPress={() => this.props.onEditPress(item)}
                         />
                       </View>
                     </View>
                   </View>
                 )}
-                keyExtractor={(_, key) => key}
+                keyExtractor={(_, index) => `${index}`}
               />
             </View>
           </View>
@@ -85,9 +100,7 @@ export default class SpinningSelector extends React.Component {
           ]}
         >
           {this.props.renderSelectedItem(
-            this.props.items.length > this.state.selected
-              ? this.props.items[this.state.selected].title
-              : "Loading"
+            capitalizeFirstLetter(this.state.selectedList)
           )}
         </Pressable>
       </View>

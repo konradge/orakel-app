@@ -2,31 +2,12 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import GeneratorLayout from "../GeneratorLayout";
 import Selector from "./Selector";
-import { getData } from "./storage";
 import { defaultListNames, defaultListValues } from "./defaultValues";
 
 export default class Main extends Component {
-  state = { selectedValue: 0, listNames: [], currentList: [] };
-  componentDidMount() {
-    this.loadListNames();
-  }
-  async updateCurrentList(newId) {
-    let newCurrentList =
-      (await getData(`custom_list/${newId}`)) || defaultListValues[newId];
-    this.setState({ currentList: newCurrentList });
-  }
-  async loadListNames() {
-    let listNames = await getData("custom_lists");
-    if (listNames === null) listNames = defaultListNames;
-    let currentList = await getData(
-      `custom_lists/${listNames[this.state.selectedValue].id}`
-    );
-    if (currentList === null)
-      currentList =
-        defaultListValues[defaultListNames[this.state.selectedValue].id] || [];
-    this.setState({ listNames, currentList });
-  }
+  state = { selectedList: "jahreszeiten" };
   render() {
+    console.log(this.props.listNames);
     return (
       <View
         style={{
@@ -41,19 +22,24 @@ export default class Main extends Component {
           selection={
             <Selector
               onEditPress={this.props.startEditing}
-              onSelect={(id) => this.updateCurrentList(id)}
-              items={this.state.listNames}
-              renderSelectedItem={(i) => (
-                <Text style={styles.selectedItem}>{i}</Text>
+              onSelect={(selectedList) => this.setState({ selectedList })}
+              listNames={this.props.listNames}
+              renderSelectedItem={(name) => (
+                <Text style={styles.selectedItem}>{name}</Text>
               )}
+              selectedList={this.state.selectedList}
             />
           }
           generatorFunction={() =>
-            Math.floor(Math.random() * this.state.currentList.length)
+            Math.floor(
+              Math.random() * this.props.lists[this.state.selectedList].length
+            )
           }
-          outputComponents={this.state.currentList.map((val) => (
-            <Text style={{ fontSize: 40 }}>{val}</Text>
-          ))}
+          outputComponents={this.props.lists[this.state.selectedList].map(
+            (val) => (
+              <Text style={{ fontSize: 40 }}>{val}</Text>
+            )
+          )}
         />
       </View>
     );

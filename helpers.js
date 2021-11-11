@@ -47,3 +47,6 @@ export const rotate = async (
   onUpdate(inputArray[start]);
   onFinish(inputArray[start]);
 };
+
+export const capitalizeFirstLetter = (string) =>
+  string.charAt(0).toUpperCase() + string.slice(1);

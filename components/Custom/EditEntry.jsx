@@ -1,16 +1,46 @@
 import React, { Component } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Icon,
+  TextInput,
+} from "react-native";
+import FeedbackPressable from "../FeedbackPressable";
 
 export default class EditEntry extends Component {
-  state = { items: [] };
-  async getItems() {}
+  state = { listInputValues: this.props.list };
   render() {
+    const { title, list } = this.props;
     return (
       <View style={styles.container}>
         <View
-          style={{ flex: 4, alignItems: "center", justifyContent: "center" }}
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <Text> {this.props.toEdit} </Text>
+          <Text style={{ fontSize: 50 }}>{title.toUpperCase()}</Text>
+        </View>
+        <View style={{ flex: 2, alignItems: "center" }}>
+          <FlatList
+            data={list}
+            renderItem={({ item, index }) => {
+              return (
+                <TextInput
+                  style={{ fontSize: 30 }}
+                  value={this.state.listInputValues[index]}
+                  onChangeText={(text) => {
+                    let updatedListInputValues = this.state.listInputValues;
+                    updatedListInputValues[index] = text;
+                    this.setState({
+                      listInputValues: updatedListInputValues,
+                    });
+                  }}
+                />
+              );
+            }}
+            keyExtractor={(_, index) => `${index}`}
+          />
         </View>
         <View
           style={{
@@ -21,10 +51,15 @@ export default class EditEntry extends Component {
           }}
         >
           <View style={{ justifyContent: "flex-start" }}>
-            <Button title="Speichern" />
+            <Button
+              title="Speichern"
+              onPress={() =>
+                this.props.onSave(this.state.listInputValues, this.props.title)
+              }
+            />
           </View>
           <View style={{ justifyContent: "flex-end" }}>
-            <Button title="Abbrechen" />
+            <Button title="Abbrechen" onPress={() => this.props.onAbort()} />
           </View>
         </View>
       </View>
