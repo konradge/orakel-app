@@ -11,6 +11,8 @@ import {
 import { Icon } from "react-native-elements";
 import { capitalizeFirstLetter } from "../../helpers";
 import FeedbackPressable from "../FeedbackPressable";
+import MyModal from "../MyModal";
+import AddListItem from "./AddListItem";
 
 export default class SpinningSelector extends React.Component {
   state = {
@@ -21,32 +23,33 @@ export default class SpinningSelector extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.opened}
-          onRequestClose={() => {
-            this.setState({ opened: false });
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              borderColor: "green",
-              borderWidth: 3,
-            }}
-          >
+        <MyModal
+          isOpen={this.state.opened}
+          modalContent={
             <View
-              style={styles.modalView}
-              onLayout={(event) =>
-                this.setState({ layout: event.nativeEvent.layout })
-              }
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                borderColor: "green",
+                borderWidth: 1,
+              }}
             >
               <FlatList
-                data={this.props.listNames}
+                style={{
+                  borderColor: "yellow",
+                  borderWidth: 2,
+                }}
+                contentContainerStyle={{
+                  flex: 1,
+                  justifyContent: "center",
+                  height: "20%",
+                }}
+                data={this.props.listNames.map((name) =>
+                  capitalizeFirstLetter(name)
+                )}
                 renderItem={({ item }) => (
-                  <View style={{ borderColor: "red", borderWidth: 1 }}>
+                  <View>
                     <View
                       style={{
                         padding: 3,
@@ -66,7 +69,7 @@ export default class SpinningSelector extends React.Component {
                               opened: false,
                             });
                             if (this.props.onSelect) {
-                              this.props.onSelect(item);
+                              this.props.onSelect(item.toLowerCase());
                             }
                           }}
                         >
@@ -87,22 +90,25 @@ export default class SpinningSelector extends React.Component {
                   </View>
                 )}
                 keyExtractor={(_, index) => `${index}`}
-              />
+              ></FlatList>
+              <AddListItem />
             </View>
-          </View>
-        </Modal>
-        <Pressable
-          onPress={() => this.setState({ opened: true })}
-          style={({ pressed }) => [
-            {
-              backgroundColor: pressed ? "rgb(210, 230, 255)" : null,
-            },
-          ]}
-        >
-          {this.props.renderSelectedItem(
-            capitalizeFirstLetter(this.state.selectedList)
-          )}
-        </Pressable>
+          }
+          outterContent={
+            <Pressable
+              onPress={() => this.setState({ opened: true })}
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? "rgb(210, 230, 255)" : null,
+                },
+              ]}
+            >
+              {this.props.renderSelectedItem(
+                capitalizeFirstLetter(this.state.selectedList)
+              )}
+            </Pressable>
+          }
+        ></MyModal>
       </View>
     );
   }
@@ -113,22 +119,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
-  },
-  modalView: {
-    margin: 20,
-    padding: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    borderColor: "red",
-    borderWidth: 1,
   },
 });

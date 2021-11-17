@@ -1,90 +1,15 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { Component } from "react";
+import { Text, View } from "react-native";
+import { Provider } from "react-redux";
+import Navigation from "./components/Navigation";
+import { prepareStore } from "./redux/store";
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import { Icon } from "react-native-elements";
-import YesNoIcon from "./components/YesNoIcon";
-import YesNo from "./components/YesNo";
-import Number from "./components/Number";
-import Date from "./components/Date";
-import Custom from "./components/Custom";
-
-export default () => {
-  const Tab = createBottomTabNavigator();
-  return (
-    <View style={styles.wrapper}>
-      <NavigationContainer
-        tabBarOptions={{
-          activeTintColor: "#e91e63",
-        }}
-      >
-        <Tab.Navigator>
-          <Tab.Screen
-            name="JaNein"
-            options={{
-              tabBarLabel: "Ja/Nein",
-              tabBarIcon: ({ focused }) => (
-                <View style={styles.centeredView}>
-                  <YesNoIcon active={focused} />
-                </View>
-              ),
-            }}
-            component={YesNo}
-          />
-          <Tab.Screen
-            name="Zahl"
-            options={{
-              tabBarLabel: "Zahl",
-              tabBarIcon: ({ focused }) => (
-                <Icon
-                  name="cube-outline"
-                  type="ionicon"
-                  color={focused ? "blue" : "gray"}
-                />
-              ),
-              tabBarInactiveColor: "red",
-            }}
-            component={Number}
-          />
-
-          <Tab.Screen
-            name="Datum"
-            options={{
-              tabBarLabel: "Datum",
-              tabBarIcon: ({ focused }) => (
-                <Icon
-                  name="calendar-outline"
-                  type="ionicon"
-                  color={focused ? "purple" : "gray"}
-                />
-              ),
-            }}
-            component={Date}
-          />
-
-          <Tab.Screen
-            name="Eigene"
-            options={{
-              tabBarLabel: "Eigene",
-              tabBarIcon: ({ focused }) => (
-                <Icon
-                  name="pencil-outline"
-                  type="ionicon"
-                  color={focused ? "blue" : "gray"}
-                />
-              ),
-            }}
-            component={Custom}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  wrapper: { flex: 1 },
-  centeredView: { alignItems: "center" },
-  text: { fontSize: 50 },
-});
+export default class App extends Component {
+  render() {
+    return (
+      <Provider store={prepareStore()}>
+        <Navigation />
+      </Provider>
+    );
+  }
+}

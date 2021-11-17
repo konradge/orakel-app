@@ -69,7 +69,7 @@ export default class Custom extends Component {
       return (
         // Main-Page
         <Main
-          listNames={Object.keys(this.getLists() || {})}
+          listNames={Object.keys(this.getLists() || [])}
           lists={this.getLists()}
           startEditing={(toEdit) =>
             this.setState({ toEdit, currentState: STATES.EDIT })
