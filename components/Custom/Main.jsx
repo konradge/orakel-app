@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import GeneratorLayout from "../GeneratorLayout";
 import Selector from "./Selector";
-import { defaultListNames, defaultListValues } from "./defaultValues";
+import { connect } from "react-redux";
+import { setCustomSectionState } from "../../redux/currentState";
 
-export default class Main extends Component {
-  state = { selectedList: "jahreszeiten" };
+class Main extends Component {
   render() {
-    console.log(this.props.listNames);
+    console.log(this.props.selectedList);
+    console.log(this.props.lists[this.props.selectedList]);
     return (
       <View
         style={{
@@ -21,21 +22,19 @@ export default class Main extends Component {
         <GeneratorLayout
           selection={
             <Selector
-              onEditPress={this.props.startEditing}
-              onSelect={(selectedList) => this.setState({ selectedList })}
               listNames={this.props.listNames}
               renderSelectedItem={(name) => (
                 <Text style={styles.selectedItem}>{name}</Text>
               )}
-              selectedList={this.state.selectedList}
             />
           }
           generatorFunction={() =>
             Math.floor(
-              Math.random() * this.props.lists[this.state.selectedList].length
+              Math.random() *
+                this.props.lists[this.props.selectedList].list.length
             )
           }
-          outputComponents={this.props.lists[this.state.selectedList].map(
+          outputComponents={this.props.lists[this.props.selectedList].list.map(
             (val) => (
               <Text style={{ fontSize: 40 }}>{val}</Text>
             )
@@ -49,3 +48,10 @@ export default class Main extends Component {
 const styles = StyleSheet.create({
   selectedItem: { fontSize: 40 },
 });
+
+export default connect(
+  ({ currentState, lists }) => {
+    return { selectedList: currentState.selectedList, lists };
+  },
+  { setCustomSectionState }
+)(Main);

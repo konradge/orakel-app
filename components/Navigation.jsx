@@ -9,8 +9,12 @@ import YesNo from "./YesNo";
 import Number from "./Number";
 import Date from "./Date";
 import Custom from "./Custom";
+import { connect } from "react-redux";
 
-export default () => {
+const Navigation = (props) => {
+  if (props.lists == null) {
+    return <Text>Loading...</Text>;
+  }
   const Tab = createBottomTabNavigator();
   return (
     <View style={styles.wrapper}>
@@ -88,3 +92,7 @@ const styles = StyleSheet.create({
   centeredView: { alignItems: "center" },
   text: { fontSize: 50 },
 });
+
+export default connect(({ currentState, lists }) => {
+  return { lists };
+})(Navigation);

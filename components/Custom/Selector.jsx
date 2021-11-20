@@ -9,16 +9,22 @@ import {
   FlatList,
 } from "react-native";
 import { Icon } from "react-native-elements";
+import { connect } from "react-redux";
 import { capitalizeFirstLetter } from "../../helpers";
+import {
+  setCustomSectionState,
+  setSelectedList,
+} from "../../redux/currentState";
 import FeedbackPressable from "../FeedbackPressable";
 import MyModal from "../MyModal";
-import AddListItem from "./AddListItem";
+import AddList from "./AddList";
+import { STATES } from "../../constants";
+import { removeList } from "../../redux/lists";
+import { defaultLists } from "./defaultValues";
 
-export default class SpinningSelector extends React.Component {
+class Selector extends React.Component {
   state = {
-    selectedList: this.props.selectedList,
     opened: false,
-    layout: { width: 0 },
   };
   render() {
     return (
@@ -45,9 +51,7 @@ export default class SpinningSelector extends React.Component {
                   justifyContent: "center",
                   height: "20%",
                 }}
-                data={this.props.listNames.map((name) =>
-                  capitalizeFirstLetter(name)
-                )}
+                data={this.props.listNames}
                 renderItem={({ item }) => (
                   <View>
                     <View
@@ -64,26 +68,53 @@ export default class SpinningSelector extends React.Component {
                       <View style={{ justifyContent: "flex-start" }}>
                         <FeedbackPressable
                           onPress={() => {
+                            // Click on the name of a list, to select the corresponding list
+                            this.props.setSelectedList(item.toLowerCase());
                             this.setState({
-                              selectedList: item,
                               opened: false,
                             });
-                            if (this.props.onSelect) {
-                              this.props.onSelect(item.toLowerCase());
-                            }
                           }}
                         >
                           <Text style={{ fontSize: 30 }}>{item}</Text>
                         </FeedbackPressable>
                       </View>
                       <View
-                        style={{ justifyContent: "flex-end", marginLeft: 50 }}
+                        style={{
+                          justifyContent: "flex-end",
+                          marginLeft: 50,
+                          flexDirection: "row",
+                        }}
                       >
+                        {!Object.keys(defaultLists).includes(
+                          item.toLowerCase()
+                        ) ? (
+                          <Icon
+                            name="trash"
+                            type="evilicon"
+                            size={50}
+                            onPress={() => {
+                              // Click on the edit-button to edit one of the list items
+                              this.props.setSelectedList(
+                                Object.keys(defaultLists)[0]
+                              );
+                              this.setState(
+                                {
+                                  opened: false,
+                                },
+                                () => this.props.removeList(item.toLowerCase())
+                              );
+                            }}
+                          />
+                        ) : null}
                         <Icon
                           name="pencil"
                           type="evilicon"
                           size={50}
-                          onPress={() => this.props.onEditPress(item)}
+                          onPress={() => {
+                            // Click on the edit-button to edit one of the list items
+                            this.props.setCustomSectionState(STATES.EDIT);
+                            this.props.setSelectedList(item.toLowerCase());
+                          }}
                         />
                       </View>
                     </View>
@@ -91,7 +122,7 @@ export default class SpinningSelector extends React.Component {
                 )}
                 keyExtractor={(_, index) => `${index}`}
               ></FlatList>
-              <AddListItem />
+              <AddList />
             </View>
           }
           outterContent={
@@ -104,7 +135,7 @@ export default class SpinningSelector extends React.Component {
               ]}
             >
               {this.props.renderSelectedItem(
-                capitalizeFirstLetter(this.state.selectedList)
+                capitalizeFirstLetter(this.props.selectedList)
               )}
             </Pressable>
           }
@@ -121,3 +152,14 @@ const styles = StyleSheet.create({
     padding: 24,
   },
 });
+
+export default connect(
+  ({ currentState, lists }) => {
+    return {
+      selectedList: currentState.selectedList,
+      lists,
+      listNames: Object.keys(lists).map((key) => lists[key].title),
+    };
+  },
+  { setSelectedList, setCustomSectionState, removeList }
+)(Selector);

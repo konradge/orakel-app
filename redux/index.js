@@ -1,3 +1,4 @@
 import { combineReducers } from "redux";
 import lists from "./lists";
-export default combineReducers({ lists });
+import currentState from "./currentState";
+export default combineReducers({ lists, currentState });

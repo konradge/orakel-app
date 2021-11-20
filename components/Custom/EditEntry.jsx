@@ -5,15 +5,18 @@ import {
   StyleSheet,
   Text,
   View,
-  Icon,
   TextInput,
 } from "react-native";
-import FeedbackPressable from "../FeedbackPressable";
+import { connect } from "react-redux";
+import { STATES } from "../../constants";
+import { setCustomSectionState } from "../../redux/currentState";
+import { setList } from "../../redux/lists";
+import { Icon } from "react-native-elements";
 
-export default class EditEntry extends Component {
-  state = { listInputValues: this.props.list };
+class EditEntry extends Component {
+  state = { listInputValues: this.props.list, addItemValue: "" };
   render() {
-    const { title, list } = this.props;
+    const { title } = this.props;
     return (
       <View style={styles.container}>
         <View
@@ -23,23 +26,59 @@ export default class EditEntry extends Component {
         </View>
         <View style={{ flex: 2, alignItems: "center" }}>
           <FlatList
-            data={list}
+            data={this.state.listInputValues}
             renderItem={({ item, index }) => {
               return (
-                <TextInput
-                  style={{ fontSize: 30 }}
-                  value={this.state.listInputValues[index]}
-                  onChangeText={(text) => {
-                    let updatedListInputValues = this.state.listInputValues;
-                    updatedListInputValues[index] = text;
-                    this.setState({
-                      listInputValues: updatedListInputValues,
-                    });
-                  }}
-                />
+                <View>
+                  <TextInput
+                    style={{ fontSize: 30 }}
+                    value={this.state.listInputValues[index]}
+                    onChangeText={(text) => {
+                      let updatedListInputValues = this.state.listInputValues;
+                      updatedListInputValues[index] = text;
+                      this.setState({
+                        listInputValues: updatedListInputValues,
+                      });
+                    }}
+                  />
+                  <Icon
+                    name="trash"
+                    type="evilicon"
+                    size={50}
+                    onPress={() => {
+                      // Click on the edit-button to edit one of the list items
+                      this.setState({
+                        listInputValues: this.state.listInputValues.filter(
+                          (value) => value != item
+                        ),
+                      });
+                    }}
+                  />
+                </View>
               );
             }}
             keyExtractor={(_, index) => `${index}`}
+          />
+          <TextInput
+            placeholder="Neuer Eintrag"
+            style={{ fontSize: 30 }}
+            value={this.state.addItemValue}
+            onChangeText={(text) => this.setState({ addItemValue: text })}
+          />
+          <Icon
+            name="plus"
+            type="evilicon"
+            size={80}
+            color="green"
+            onPress={() =>
+              this.setState({
+                listInputValues: [
+                  ...this.state.listInputValues,
+                  this.state.addItemValue,
+                ],
+                addItemValue: "",
+              })
+            }
           />
         </View>
         <View
@@ -53,13 +92,19 @@ export default class EditEntry extends Component {
           <View style={{ justifyContent: "flex-start" }}>
             <Button
               title="Speichern"
-              onPress={() =>
-                this.props.onSave(this.state.listInputValues, this.props.title)
-              }
+              onPress={() => {
+                this.props.setList(
+                  this.props.selectedList,
+                  this.state.listInputValues
+                );
+                this.props.close();
+              }}
             />
           </View>
           <View style={{ justifyContent: "flex-end" }}>
-            <Button title="Abbrechen" onPress={() => this.props.onAbort()} />
+            {false ? (
+              <Button title="Abbrechen" onPress={() => this.props.close()} />
+            ) : null}
           </View>
         </View>
       </View>
@@ -74,3 +119,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+export default connect(
+  ({ currentState, lists }) => {
+    return {
+      selectedList: currentState.selectedList,
+      list: lists[currentState.selectedList].list,
+      title: lists[currentState.selectedList].title,
+    };
+  },
+  { setList, close: () => setCustomSectionState(STATES.MAIN) }
+)(EditEntry);

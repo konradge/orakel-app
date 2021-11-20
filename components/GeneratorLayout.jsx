@@ -38,7 +38,6 @@ const GeneratorLayout = (props) => {
             if (onGenerateButtonPress) onGenerateButtonPress();
             const newEndIndex = generatorFunction();
             setButtonDisabled(true);
-            console.log("Start index is " + startIndex);
             setElements(
               getRandomComponents(
                 props.outputComponents,
