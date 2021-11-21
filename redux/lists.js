@@ -1,7 +1,7 @@
 import { defaultLists } from "../components/Custom/defaultValues";
 import _ from "lodash";
 const defaultState = defaultLists;
-export default (lists = defaultLists, action) => {
+export default (lists = null, action) => {
   switch (action.type) {
     case "SET_LISTS":
       return action.payload;
@@ -27,9 +27,6 @@ export default (lists = defaultLists, action) => {
         },
       };
     case "REMOVE_LIST":
-      console.log("REMOVE:");
-      console.log(action.payload);
-      console.log(lists);
       return _.omit(lists, [action.payload]);
     default:
       return lists;
@@ -50,7 +47,6 @@ export const loadLists = () => {
 
 // Adds a new list based on a given title and list
 export const addList = (title, list = []) => {
-  console.log("Add list with title " + title);
   return {
     type: "ADD_LIST",
     payload: { title, list, key: title.toLowerCase() },
@@ -58,6 +54,5 @@ export const addList = (title, list = []) => {
 };
 
 export const removeList = (keyToDelete) => {
-  console.log(keyToDelete);
   return { type: "REMOVE_LIST", payload: keyToDelete };
 };

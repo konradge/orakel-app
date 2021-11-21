@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     shadowColor: "#000",
     backgroundColor: "white",
-    borderColor: "red",
     borderWidth: 1,
     shadowOffset: {
       width: 0,

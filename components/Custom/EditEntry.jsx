@@ -1,17 +1,11 @@
 import React, { Component } from "react";
-import {
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-} from "react-native";
+import { FlatList, StyleSheet, Text, View, TextInput } from "react-native";
 import { connect } from "react-redux";
 import { STATES } from "../../constants";
 import { setCustomSectionState } from "../../redux/currentState";
 import { setList } from "../../redux/lists";
-import { Icon } from "react-native-elements";
+import { Button, Icon, Input } from "react-native-elements";
+import { TextWithIcon } from "../TextWithIcon";
 
 class EditEntry extends Component {
   state = { listInputValues: this.props.list, addItemValue: "" };
@@ -22,62 +16,78 @@ class EditEntry extends Component {
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <Text style={{ fontSize: 50 }}>{title.toUpperCase()}</Text>
+          <Text style={{ fontSize: 50 }} numberOfLines={1} ellipsizeMode="tail">
+            {title.toUpperCase()}
+          </Text>
         </View>
-        <View style={{ flex: 2, alignItems: "center" }}>
+        <View
+          style={{
+            flex: 2,
+            alignItems: "center",
+            width: "90%",
+          }}
+        >
           <FlatList
+            style={{ width: "100%" }}
             data={this.state.listInputValues}
             renderItem={({ item, index }) => {
               return (
-                <View>
-                  <TextInput
-                    style={{ fontSize: 30 }}
-                    value={this.state.listInputValues[index]}
-                    onChangeText={(text) => {
-                      let updatedListInputValues = this.state.listInputValues;
-                      updatedListInputValues[index] = text;
-                      this.setState({
-                        listInputValues: updatedListInputValues,
-                      });
-                    }}
-                  />
-                  <Icon
-                    name="trash"
-                    type="evilicon"
-                    size={50}
-                    onPress={() => {
-                      // Click on the edit-button to edit one of the list items
-                      this.setState({
-                        listInputValues: this.state.listInputValues.filter(
-                          (value) => value != item
-                        ),
-                      });
-                    }}
-                  />
-                </View>
+                <Input
+                  style={{
+                    fontSize: 50,
+                  }}
+                  value={item}
+                  onChangeText={(text) => {
+                    // The text at position index is being updated
+                    let updatedListInputValues = [
+                      ...this.state.listInputValues,
+                    ];
+                    updatedListInputValues[index] = text;
+                    this.setState({
+                      listInputValues: updatedListInputValues,
+                    });
+                  }}
+                  rightIcon={
+                    <Icon
+                      name="trash"
+                      type="evilicon"
+                      size={50}
+                      onPress={() => {
+                        // Click on the edit-button to edit one of the list items
+                        this.setState({
+                          listInputValues: this.state.listInputValues.filter(
+                            (_, i) => index != i
+                          ),
+                        });
+                      }}
+                    />
+                  }
+                />
               );
             }}
             keyExtractor={(_, index) => `${index}`}
           />
-          <TextInput
+          <Input
             placeholder="Neuer Eintrag"
-            style={{ fontSize: 30 }}
+            style={{ fontSize: 40 }}
             value={this.state.addItemValue}
             onChangeText={(text) => this.setState({ addItemValue: text })}
-          />
-          <Icon
-            name="plus"
-            type="evilicon"
-            size={80}
-            color="green"
-            onPress={() =>
-              this.setState({
-                listInputValues: [
-                  ...this.state.listInputValues,
-                  this.state.addItemValue,
-                ],
-                addItemValue: "",
-              })
+            rightIcon={
+              <Icon
+                name="add"
+                color="green"
+                reverse
+                disabled={this.state.addItemValue === ""}
+                onPress={() =>
+                  this.setState({
+                    listInputValues: [
+                      ...this.state.listInputValues,
+                      this.state.addItemValue,
+                    ],
+                    addItemValue: "",
+                  })
+                }
+              />
             }
           />
         </View>
@@ -89,23 +99,29 @@ class EditEntry extends Component {
             justifyContent: "space-between",
           }}
         >
-          <View style={{ justifyContent: "flex-start" }}>
-            <Button
-              title="Speichern"
-              onPress={() => {
-                this.props.setList(
-                  this.props.selectedList,
-                  this.state.listInputValues
-                );
-                this.props.close();
-              }}
-            />
-          </View>
-          <View style={{ justifyContent: "flex-end" }}>
-            {false ? (
-              <Button title="Abbrechen" onPress={() => this.props.close()} />
-            ) : null}
-          </View>
+          <Icon
+            name="save"
+            color="green"
+            size={50}
+            reverse
+            onPress={() => {
+              this.props.setList(
+                this.props.selectedList,
+                this.state.listInputValues
+              );
+              this.props.close();
+            }}
+          />
+          <Icon
+            name="close"
+            color="red"
+            size={50}
+            reverse
+            onPress={() => {
+              this.setState({ listInputValues: this.props.list });
+              this.props.close();
+            }}
+          />
         </View>
       </View>
     );

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Button, Text, TextInput, View } from "react-native";
-import { Icon } from "react-native-elements";
+import { Text, TextInput, View } from "react-native";
+import { Icon, Button, ButtonGroup } from "react-native-elements";
 import { connect } from "react-redux";
 import MyModal from "../MyModal";
 import { addList } from "../../redux/lists";
@@ -19,13 +19,30 @@ class AddList extends Component {
               value={this.state.value}
               onChangeText={(text) => this.setState({ value: text })}
             />
-            <Button
-              title={"OK"}
-              onPress={() => {
-                this.props.addList(this.state.value);
-                this.setState({ value: "", isModalOpen: false });
-              }}
-            />
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-evenly" }}
+            >
+              <Icon
+                color="green"
+                name="check"
+                size={50}
+                reverse
+                disabled={this.state.value === ""}
+                onPress={() => {
+                  this.props.addList(this.state.value);
+                  this.setState({ value: "", isModalOpen: false });
+                }}
+              />
+              <Icon
+                name="close"
+                color="red"
+                size={50}
+                reverse
+                onPress={() => {
+                  this.setState({ value: "", isModalOpen: false });
+                }}
+              />
+            </View>
           </View>
         }
         outterContent={

@@ -8,7 +8,7 @@ import {
   Modal,
   FlatList,
 } from "react-native";
-import { Icon } from "react-native-elements";
+import { Icon, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { capitalizeFirstLetter } from "../../helpers";
 import {
@@ -21,6 +21,7 @@ import AddList from "./AddList";
 import { STATES } from "../../constants";
 import { removeList } from "../../redux/lists";
 import { defaultLists } from "./defaultValues";
+import { TextWithIcon } from "../TextWithIcon";
 
 class Selector extends React.Component {
   state = {
@@ -37,20 +38,9 @@ class Selector extends React.Component {
                 flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
-                borderColor: "green",
-                borderWidth: 1,
               }}
             >
               <FlatList
-                style={{
-                  borderColor: "yellow",
-                  borderWidth: 2,
-                }}
-                contentContainerStyle={{
-                  flex: 1,
-                  justifyContent: "center",
-                  height: "20%",
-                }}
                 data={this.props.listNames}
                 renderItem={({ item }) => (
                   <View>
@@ -65,58 +55,64 @@ class Selector extends React.Component {
                         borderWidth: 1,
                       }}
                     >
-                      <View style={{ justifyContent: "flex-start" }}>
-                        <FeedbackPressable
-                          onPress={() => {
-                            // Click on the name of a list, to select the corresponding list
-                            this.props.setSelectedList(item.toLowerCase());
-                            this.setState({
-                              opened: false,
-                            });
-                          }}
-                        >
-                          <Text style={{ fontSize: 30 }}>{item}</Text>
-                        </FeedbackPressable>
-                      </View>
-                      <View
-                        style={{
-                          justifyContent: "flex-end",
-                          marginLeft: 50,
-                          flexDirection: "row",
+                      <TextWithIcon
+                        onPress={() => {
+                          // Click on the name of a list, to select the corresponding list
+                          this.props.setSelectedList(item.toLowerCase());
+                          this.setState({
+                            opened: false,
+                          });
                         }}
-                      >
-                        {!Object.keys(defaultLists).includes(
-                          item.toLowerCase()
-                        ) ? (
-                          <Icon
-                            name="trash"
-                            type="evilicon"
-                            size={50}
-                            onPress={() => {
-                              // Click on the edit-button to edit one of the list items
-                              this.props.setSelectedList(
-                                Object.keys(defaultLists)[0]
-                              );
-                              this.setState(
-                                {
-                                  opened: false,
-                                },
-                                () => this.props.removeList(item.toLowerCase())
-                              );
+                        size={30}
+                        textComponent={
+                          <Text
+                            style={{ fontSize: 30, minWidth: "40%" }}
+                            numberOfLines={1}
+                          >
+                            {item}
+                          </Text>
+                        }
+                        icon={
+                          <View
+                            style={{
+                              flexDirection: "row",
                             }}
-                          />
-                        ) : null}
-                        <Icon
-                          name="pencil"
-                          type="evilicon"
-                          size={50}
-                          onPress={() => {
-                            // Click on the edit-button to edit one of the list items
-                            this.props.setCustomSectionState(STATES.EDIT);
-                            this.props.setSelectedList(item.toLowerCase());
-                          }}
-                        />
-                      </View>
+                          >
+                            <Icon
+                              name="pencil"
+                              type="evilicon"
+                              size={50}
+                              onPress={() => {
+                                // Click on the edit-button to edit one of the list items
+                                this.props.setCustomSectionState(STATES.EDIT);
+                                this.props.setSelectedList(item.toLowerCase());
+                              }}
+                            />
+                            {!Object.keys(defaultLists).includes(
+                              item.toLowerCase()
+                            ) ? (
+                              <Icon
+                                name="trash"
+                                type="evilicon"
+                                size={50}
+                                onPress={() => {
+                                  // Click on the edit-button to edit one of the list items
+                                  this.props.setSelectedList(
+                                    Object.keys(defaultLists)[0]
+                                  );
+                                  this.setState(
+                                    {
+                                      opened: false,
+                                    },
+                                    () =>
+                                      this.props.removeList(item.toLowerCase())
+                                  );
+                                }}
+                              />
+                            ) : null}
+                          </View>
+                        }
+                      />
                     </View>
                   </View>
                 )}
@@ -155,6 +151,8 @@ const styles = StyleSheet.create({
 
 export default connect(
   ({ currentState, lists }) => {
+    console.log("------------Lists-------------");
+    console.log(lists);
     return {
       selectedList: currentState.selectedList,
       lists,

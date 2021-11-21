@@ -23,7 +23,6 @@ export default (
 };
 
 export const setSelectedList = (listKey) => {
-  console.log("Changing selected list to " + listKey);
   return { type: "SET_SELECTED_LIST", payload: listKey };
 };
 

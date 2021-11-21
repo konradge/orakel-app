@@ -7,8 +7,6 @@ import { setCustomSectionState } from "../../redux/currentState";
 
 class Main extends Component {
   render() {
-    console.log(this.props.selectedList);
-    console.log(this.props.lists[this.props.selectedList]);
     return (
       <View
         style={{
@@ -36,7 +34,9 @@ class Main extends Component {
           }
           outputComponents={this.props.lists[this.props.selectedList].list.map(
             (val) => (
-              <Text style={{ fontSize: 40 }}>{val}</Text>
+              <Text style={{ fontSize: 40 }} numberOfLines={1}>
+                {val}
+              </Text>
             )
           )}
         />
