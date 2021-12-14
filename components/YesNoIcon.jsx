@@ -6,13 +6,13 @@ export default ({ active }) => {
   return (
     <View style={styles.container}>
       <Icon
-        name="thumbs-up-outline"
-        type="ionicon"
+        name="thumbs-up"
+        type="font-awesome-5"
         color={active ? "green" : "grey"}
       />
       <Icon
-        name="thumbs-down-outline"
-        type="ionicon"
+        name="thumbs-down"
+        type="font-awesome-5"
         color={active ? "red" : "grey"}
       />
     </View>

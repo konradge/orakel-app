@@ -52,9 +52,9 @@ class Navigation extends React.Component {
                 tabBarLabel: "Zahl",
                 tabBarIcon: ({ focused }) => (
                   <Icon
-                    name="cube-outline"
-                    type="ionicon"
-                    color={focused ? "blue" : "gray"}
+                    name="dice"
+                    type="font-awesome-5"
+                    color={focused ? "black" : "gray"}
                   />
                 ),
                 tabBarInactiveColor: "red",
@@ -68,8 +68,8 @@ class Navigation extends React.Component {
                 tabBarLabel: "Datum",
                 tabBarIcon: ({ focused }) => (
                   <Icon
-                    name="calendar-outline"
-                    type="ionicon"
+                    name="calendar-alt"
+                    type="font-awesome-5"
                     color={focused ? "purple" : "gray"}
                   />
                 ),
@@ -83,8 +83,8 @@ class Navigation extends React.Component {
                 tabBarLabel: "Eigene",
                 tabBarIcon: ({ focused }) => (
                   <Icon
-                    name="pencil-outline"
-                    type="ionicon"
+                    name="pencil-alt"
+                    type="font-awesome-5"
                     color={focused ? "blue" : "gray"}
                   />
                 ),

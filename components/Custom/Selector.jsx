@@ -130,9 +130,12 @@ class Selector extends React.Component {
                 },
               ]}
             >
-              {this.props.renderSelectedItem(
-                capitalizeFirstLetter(this.props.selectedList)
-              )}
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                {this.props.renderSelectedItem(
+                  capitalizeFirstLetter(this.props.selectedList)
+                )}
+                <Icon name="caret-down-outline" type="ionicon" size={30} />
+              </View>
             </Pressable>
           }
         ></MyModal>

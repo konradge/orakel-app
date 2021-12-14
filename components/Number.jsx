@@ -6,12 +6,26 @@ import { isNumber } from "../helpers";
 import GeneratorLayout from "./GeneratorLayout";
 
 export default () => {
-  const [maxValue, setMaxValue] = useState("10");
-  const [minValue, setMinValue] = useState("0");
+  const [maxValue, _setMaxValue] = useState("10");
+  const [minValue, _setMinValue] = useState("0");
   const [maxError, setMaxError] = useState(null);
   const [minError, setMinError] = useState(null);
 
-  useEffect(() => {
+  const setMinValue = (minValue) => {
+    if (!isNumber(minValue)) {
+      setMinError("Number required!");
+      console.log("ERROR");
+      if (isNumber(maxValue)) setMaxError(null);
+    } else if (isNumber(maxValue) && Number(maxValue) < Number(minValue)) {
+      setMinError("Minimum value must be smaller than maximum value!");
+    } else {
+      setMinError(null);
+      setMaxError(null);
+      _setMinValue(minValue);
+    }
+  };
+
+  const setMaxValue = (maxValue) => {
     if (!isNumber(maxValue)) {
       setMaxError("Number required!");
       if (isNumber(minValue)) setMinError(null);
@@ -20,20 +34,9 @@ export default () => {
     } else {
       setMinError(null);
       setMaxError(null);
+      _setMaxValue(maxValue);
     }
-  }, [maxValue]);
-
-  useEffect(() => {
-    if (!isNumber(minValue)) {
-      setMinError("Number required!");
-      if (isNumber(maxValue)) setMaxError(null);
-    } else if (isNumber(maxValue) && Number(maxValue) < Number(minValue)) {
-      setMinError("Minimum value must be smaller than maximum value!");
-    } else {
-      setMinError(null);
-      setMaxError(null);
-    }
-  }, [minValue]);
+  };
   return (
     <GeneratorLayout
       selection={
@@ -69,11 +72,15 @@ export default () => {
         return Math.floor(Math.random() * (max - min));
       }}
       generateButtonDisabled={maxError !== null || minError !== null}
-      outputComponents={Array.from(
-        new Array(Number(maxValue) - Number(minValue) + 1)
-      ).map((_, i) => (
-        <Text style={styles.bigText}>{i + Number(minValue)}</Text>
-      ))}
+      outputComponents={
+        minError || maxError
+          ? []
+          : Array.from(new Array(Number(maxValue) - Number(minValue) + 1)).map(
+              (_, i) => (
+                <Text style={styles.bigText}>{i + Number(minValue)}</Text>
+              )
+            )
+      }
     />
   );
 };
