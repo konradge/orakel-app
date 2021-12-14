@@ -14,7 +14,7 @@ export default class Example extends Component {
           elements={[1, 2, 3, 4, 5, 6, 7].map((el) => (
             <Text>{el}</Text>
           ))}
-          onAnimationEnd={() => console.log("Animation ended!")}
+          onAnimationEnd={() => null}
         />
         <Button
           title={"Start animation"}

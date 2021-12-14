@@ -27,8 +27,6 @@ export function prepareStore() {
 export const loadState = async () => {
   try {
     const serializedState = JSON.parse(await AsyncStorage.getItem(STORE_NAME));
-    console.log("Got serialized state...");
-    console.log(serializedState);
     if (serializedState == null) {
       return defaultLists;
     }
@@ -42,8 +40,6 @@ export const loadState = async () => {
 
 // Saves a redux-state to the async storage
 export const saveState = (state) => {
-  console.log("Saving state...");
-  console.log(state);
   try {
     const serializedState = JSON.stringify(state);
     AsyncStorage.setItem(STORE_NAME, JSON.stringify(serializedState));

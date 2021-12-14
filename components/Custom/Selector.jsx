@@ -151,8 +151,6 @@ const styles = StyleSheet.create({
 
 export default connect(
   ({ currentState, lists }) => {
-    console.log("------------Lists-------------");
-    console.log(lists);
     return {
       selectedList: currentState.selectedList,
       lists,

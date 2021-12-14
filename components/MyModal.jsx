@@ -11,9 +11,6 @@ export default class MyModal extends Component {
           animationType="slide"
           transparent={false}
           visible={this.props.isOpen}
-          onRequestClose={() => {
-            console.log("onRequestClose");
-          }}
         >
           <View
             style={styles.modalView}
