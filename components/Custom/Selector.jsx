@@ -22,6 +22,8 @@ import { STATES } from "../../constants";
 import { removeList } from "../../redux/lists";
 import { defaultLists } from "./defaultValues";
 import { TextWithIcon } from "../TextWithIcon";
+import { showMessage } from "react-native-flash-message";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 class Selector extends React.Component {
   state = {
@@ -100,13 +102,12 @@ class Selector extends React.Component {
                                   this.props.setSelectedList(
                                     Object.keys(defaultLists)[0]
                                   );
-                                  this.setState(
-                                    {
-                                      opened: false,
-                                    },
-                                    () =>
-                                      this.props.removeList(item.toLowerCase())
-                                  );
+                                  this.props.removeList(item.toLowerCase());
+
+                                  showMessage({
+                                    message: `Liste ${item} erfolgreich gelöscht`,
+                                    type: "success",
+                                  });
                                 }}
                               />
                             ) : null}
@@ -118,11 +119,12 @@ class Selector extends React.Component {
                 )}
                 keyExtractor={(_, index) => `${index}`}
               ></FlatList>
-              <AddList />
+              <AddList onClose={() => {}} />
             </View>
           }
           outterContent={
-            <Pressable
+            <TouchableOpacity
+              disabled={this.props.currentlySpinning}
               onPress={() => this.setState({ opened: true })}
               style={({ pressed }) => [
                 {
@@ -130,13 +132,29 @@ class Selector extends React.Component {
                 },
               ]}
             >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                {this.props.renderSelectedItem(
-                  capitalizeFirstLetter(this.props.selectedList)
-                )}
-                <Icon name="caret-down-outline" type="ionicon" size={30} />
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: this.props.currentlySpinning ? "grey" : "black",
+                  }}
+                >
+                  {this.props.renderSelectedItem(
+                    capitalizeFirstLetter(this.props.selectedList)
+                  )}
+                  <Icon
+                    name="caret-down-outline"
+                    type="ionicon"
+                    size={30}
+                    color={this.props.currentlySpinning ? "grey" : null}
+                  />
+                </Text>
               </View>
-            </Pressable>
+            </TouchableOpacity>
           }
         ></MyModal>
       </View>
@@ -158,6 +176,7 @@ export default connect(
       selectedList: currentState.selectedList,
       lists,
       listNames: Object.keys(lists).map((key) => lists[key].title),
+      currentlySpinning: currentState.currentlySpinning,
     };
   },
   { setSelectedList, setCustomSectionState, removeList }

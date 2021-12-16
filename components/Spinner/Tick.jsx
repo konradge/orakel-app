@@ -18,6 +18,7 @@ class Tick extends React.Component {
   }
 
   restartAnimation() {
+    console.log("Starting with height " + this.props.height);
     this.setState(
       {
         animation: new Animated.Value(getPosition(0, this.props.height)),
@@ -43,6 +44,7 @@ class Tick extends React.Component {
   }
 
   render() {
+    console.log(this.props.height);
     const { elements } = this.props;
     const translation = getTranslateStyle(this.state.animation);
     return <Animated.View style={translation}>{elements}</Animated.View>;

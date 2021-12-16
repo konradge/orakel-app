@@ -4,6 +4,8 @@ import { Icon, Button, ButtonGroup } from "react-native-elements";
 import { connect } from "react-redux";
 import MyModal from "../MyModal";
 import { addList } from "../../redux/lists";
+import { showMessage } from "react-native-flash-message";
+import { setSelectedList } from "../../redux/currentState";
 
 class AddList extends Component {
   state = { isModalOpen: false, value: "" };
@@ -31,6 +33,11 @@ class AddList extends Component {
                 onPress={() => {
                   this.props.addList(this.state.value);
                   this.setState({ value: "", isModalOpen: false });
+
+                  showMessage({
+                    message: `Liste ${this.state.value} wurde hinzugefügt`,
+                    type: "success",
+                  });
                 }}
               />
               <Icon
@@ -65,5 +72,5 @@ export default connect(
   (state) => {
     return {};
   },
-  { addList }
+  { addList, setSelectedList }
 )(AddList);

@@ -47,3 +47,7 @@ export const saveState = (state) => {
     console.error(err);
   }
 };
+
+export const clear = () => {
+  AsyncStorage.removeItem(STORE_NAME);
+};

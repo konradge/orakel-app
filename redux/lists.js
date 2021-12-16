@@ -1,8 +1,9 @@
 import { defaultLists } from "../components/Custom/defaultValues";
 import _ from "lodash";
-const defaultState = defaultLists;
 export default (lists = null, action) => {
   switch (action.type) {
+    case "RESET_APP":
+      return defaultLists;
     case "SET_LISTS":
       return action.payload;
     case "SET_LIST":
@@ -31,6 +32,10 @@ export default (lists = null, action) => {
     default:
       return lists;
   }
+};
+
+export const resetApp = () => {
+  return { type: "RESET_APP" };
 };
 
 export const setLists = (lists) => {

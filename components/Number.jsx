@@ -14,7 +14,6 @@ export default () => {
   const setMinValue = (minValue) => {
     if (!isNumber(minValue)) {
       setMinError("Number required!");
-      console.log("ERROR");
       if (isNumber(maxValue)) setMaxError(null);
     } else if (isNumber(maxValue) && Number(maxValue) < Number(minValue)) {
       setMinError("Minimum value must be smaller than maximum value!");

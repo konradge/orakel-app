@@ -9,7 +9,7 @@ export default class MyModal extends Component {
       <View>
         <Modal
           animationType="slide"
-          transparent={false}
+          transparent={true}
           visible={this.props.isOpen}
         >
           <View
@@ -29,6 +29,7 @@ export default class MyModal extends Component {
 
 const styles = StyleSheet.create({
   modalView: {
+    marginTop: 50,
     flex: 1,
     justifyContent: "center",
     margin: 20,

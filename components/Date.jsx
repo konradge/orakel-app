@@ -31,8 +31,9 @@ export default () => {
       generateButtonDisabled={
         dateBoundaries.start == null || dateBoundaries.end == null
       }
+      emptyText="Bitte wähle ein Startdatum"
       outputComponents={generateAllDates(
-        new Date(dateBoundaries.start),
+        dateBoundaries.start ? new Date(dateBoundaries.start) : null,
         new Date(dateBoundaries.end)
       )
         .map((d) => new Date(d))

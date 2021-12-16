@@ -26,6 +26,7 @@ class Main extends Component {
               )}
             />
           }
+          emptyText="Die ausgewählte Liste ist leer"
           generatorFunction={() =>
             Math.floor(
               Math.random() *

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,6 +12,8 @@ import Custom from "./Custom";
 import { connect } from "react-redux";
 import { loadState } from "../redux/store";
 import { setLists } from "../redux/lists";
+import Settings from "./Settings";
+import { showMessage } from "react-native-flash-message";
 
 class Navigation extends React.Component {
   componentDidMount() {
@@ -27,7 +29,7 @@ class Navigation extends React.Component {
     }
     const Tab = createBottomTabNavigator();
     return (
-      <View style={styles.wrapper}>
+      <View style={[styles.wrapper, { paddingTop: 0 }]}>
         <NavigationContainer
           tabBarOptions={{
             activeTintColor: "#e91e63",
@@ -54,7 +56,7 @@ class Navigation extends React.Component {
                   <Icon
                     name="dice"
                     type="font-awesome-5"
-                    color={focused ? "black" : "gray"}
+                    color={focused ? "pink" : "gray"}
                   />
                 ),
                 tabBarInactiveColor: "red",
@@ -90,6 +92,21 @@ class Navigation extends React.Component {
                 ),
               }}
               component={Custom}
+            />
+
+            <Tab.Screen
+              name="Einstellungen"
+              options={{
+                tabBarLabel: "Einstellungen",
+                tabBarIcon: ({ focused }) => (
+                  <Icon
+                    name="cog"
+                    type="font-awesome-5"
+                    color={focused ? "black" : "gray"}
+                  />
+                ),
+              }}
+              component={Settings}
             />
           </Tab.Navigator>
         </NavigationContainer>

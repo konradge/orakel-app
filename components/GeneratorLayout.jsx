@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
-import { Button } from "react-native-elements";
+import { Button, Icon } from "react-native-elements";
 import Spinner from "./Spinner/Spinner";
 
 const GeneratorLayout = (props) => {
@@ -19,13 +19,23 @@ const GeneratorLayout = (props) => {
   const [shouldNotCallOnAnimationEnd, setShouldNotCallOnAnimationEnd] =
     useState(false);
   useEffect(() => {
-    spinnerRef.current.restart();
+    if (spinnerRef.current) spinnerRef.current.restart();
   }, [elements]);
   useEffect(() => {
     setElements([props.outputComponents[0]]);
     setStartIndex(0);
     setShouldNotCallOnAnimationEnd(true);
   }, [props.outputComponents]);
+  const [MySpinner, setMySpinner] = useState(null);
+
+  useEffect(() => {
+    // Spinner must only be initiated once, otherwise the constructor would be called multiplte times ==> Height is reseted
+    setMySpinner(
+      React.forwardRef((props, ref) => <Spinner {...props} ref={ref} />)
+    );
+  }, []);
+  if (MySpinner === null && props.outputComponents.length !== 0)
+    return <Text>Loading...</Text>;
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -55,8 +65,20 @@ const GeneratorLayout = (props) => {
         />
       </View>
       <View style={styles.bottom}>
-        {
-          <Spinner
+        {props.outputComponents.length === 0 ? (
+          <View>
+            <Icon name="ban" type="font-awesome" size={80} />
+            <Text
+              style={{
+                fontSize: 40,
+                textAlign: "center",
+              }}
+            >
+              {props.emptyText || "Ich kann nicht zwischen Nichts entscheiden!"}
+            </Text>
+          </View>
+        ) : (
+          <MySpinner
             elements={elements}
             ref={spinnerRef}
             onAnimationEnd={() => {
@@ -69,7 +91,7 @@ const GeneratorLayout = (props) => {
               }
             }}
           />
-        }
+        )}
       </View>
     </View>
   );
