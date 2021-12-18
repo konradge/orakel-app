@@ -74,7 +74,6 @@ class Spinner extends React.Component {
           <View
             style={styles.measurement}
             onLayout={(e) => {
-              console.log("The height is " + e.nativeEvent.layout.height);
               this.setState({ height: e.nativeEvent.layout.height });
             }}
           >

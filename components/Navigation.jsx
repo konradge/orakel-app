@@ -14,6 +14,7 @@ import { loadState } from "../redux/store";
 import { setLists } from "../redux/lists";
 import Settings from "./Settings";
 import { showMessage } from "react-native-flash-message";
+import Loader from "./Loader";
 
 class Navigation extends React.Component {
   componentDidMount() {
@@ -25,7 +26,7 @@ class Navigation extends React.Component {
   }
   render() {
     if (this.props.lists == null) {
-      return <Text>Loading...</Text>;
+      return <Loader />;
     }
     const Tab = createBottomTabNavigator();
     return (

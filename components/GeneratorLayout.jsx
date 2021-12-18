@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { Button, Icon } from "react-native-elements";
+import Loader from "./Loader";
 import Spinner from "./Spinner/Spinner";
 
 const GeneratorLayout = (props) => {
@@ -35,7 +36,7 @@ const GeneratorLayout = (props) => {
     );
   }, []);
   if (MySpinner === null && props.outputComponents.length !== 0)
-    return <Text>Loading...</Text>;
+    return <Loader />;
   return (
     <View style={styles.container}>
       <View style={styles.top}>

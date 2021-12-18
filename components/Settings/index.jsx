@@ -6,6 +6,7 @@ import { clear } from "../../redux/store";
 import { connect } from "react-redux";
 import { resetApp } from "../../redux/lists";
 import { showMessage } from "react-native-flash-message";
+import SetDecisionTime from "../SetDecisionTime";
 class Settings extends Component {
   render() {
     return (
@@ -45,19 +46,25 @@ class Settings extends Component {
             // );
           }}
         />
-        <Button
-          icon={
-            <Icon
-              name="hourglass"
-              type="font-awesome-5"
-              size={30}
-              color="lightgreen"
-              style={{ paddingRight: 10 }}
+        <SetDecisionTime
+          trigger={
+            <Button
+              disabled={true}
+              disabledStyle={null}
+              icon={
+                <Icon
+                  name="hourglass"
+                  type="font-awesome-5"
+                  size={30}
+                  color="lightgreen"
+                  style={{ paddingRight: 10 }}
+                />
+              }
+              containerStyle={styles.buttonContainer}
+              titleStyle={{ fontSize: 20, textAlign: "left" }}
+              title="Entscheidungszeit verändern"
             />
           }
-          containerStyle={styles.buttonContainer}
-          titleStyle={{ fontSize: 20, textAlign: "left" }}
-          title="Entscheidungszeit verändern"
         />
         <Button
           icon={
