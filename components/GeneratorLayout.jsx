@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { Button, Icon } from "react-native-elements";
+import { connect } from "react-redux";
+import {
+  resetCurrentlySpinning,
+  setCurrentlySpinning,
+} from "../redux/currentState";
 import Loader from "./Loader";
 import Spinner from "./Spinner/Spinner";
 
@@ -12,10 +17,14 @@ const GeneratorLayout = (props) => {
     generatorFunction,
   } = props;
   const spinnerRef = useRef(null);
-  const [elements, setElements] = useState([props.outputComponents[0]]);
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(0);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [elements, _setElements] = useState([props.outputComponents[0]]);
+
+  const setElements = (elements) => {
+    _setElements(elements);
+  };
 
   const [shouldNotCallOnAnimationEnd, setShouldNotCallOnAnimationEnd] =
     useState(false);
@@ -46,22 +55,20 @@ const GeneratorLayout = (props) => {
           type="outline"
           titleStyle={{ fontSize: 50 }}
           onPress={() => {
+            props.setCurrentlySpinning();
             if (onGenerateButtonPress) onGenerateButtonPress();
             const newEndIndex = generatorFunction();
             setButtonDisabled(true);
-            setElements(
-              getRandomComponents(
-                props.outputComponents,
-                startIndex,
-                newEndIndex
-              )
+            const randomComponents = getRandomComponents(
+              props.outputComponents,
+              startIndex,
+              newEndIndex
             );
+            setElements(randomComponents);
             setEndIndex(newEndIndex);
           }}
           disabled={
-            generateButtonDisabled ||
-            buttonDisabled ||
-            props.outputComponents.length == 0
+            props.currentlySpinning || props.outputComponents.length == 0
           }
         />
       </View>
@@ -86,6 +93,7 @@ const GeneratorLayout = (props) => {
               if (shouldNotCallOnAnimationEnd) {
                 setShouldNotCallOnAnimationEnd(false);
               } else {
+                // Here is the actual animation end
                 setButtonDisabled(false);
                 setStartIndex(endIndex);
                 setEndIndex(endIndex);
@@ -125,7 +133,10 @@ const getRandomComponents = (
   return [...newComponents];
 };
 
-export default GeneratorLayout;
+export default connect(
+  (state) => ({ currentlySpinning: state.currentState.currentlySpinning }),
+  { setCurrentlySpinning, resetCurrentlySpinning }
+)(GeneratorLayout);
 
 const styles = StyleSheet.create({
   container: { flex: 1 },

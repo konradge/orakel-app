@@ -48,7 +48,6 @@ class Spinner extends React.Component {
       },
       () => {
         if (this.props.onAnimationStart) this.props.onAnimationStart();
-        this.props.setCurrentlySpinning();
         this.tickRef.current.restartAnimation();
       }
     );

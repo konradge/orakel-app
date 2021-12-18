@@ -17,6 +17,7 @@ export default () => {
     <GeneratorLayout
       selection={
         <DatePicker
+          disabled={true}
           onDateChange={(start, end) => {
             setDateBoundaries({ start, end });
           }}

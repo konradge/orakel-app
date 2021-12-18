@@ -12,16 +12,19 @@ const SetDecisionTime = (props) => {
   const [maxValue, setMaxValue] = useState(`${props.maxValue}`);
   const [maxError, setMaxError] = useState(null);
 
-  useEffect(() => {
-    if (isNaN(Number(minValue))) {
-      setMinError("Nur Zahlen erlaubt!");
-    } else if (Number(minValue) > Number(maxValue)) {
-      setMinError("Kleinste Zahl muss größer als größte Zahl sein!");
-    } else {
-      setMinError(null);
-      if (!isNaN(Number(maxValue))) setMaxError(null);
-    }
-  }, [minValue]);
+  useEffect(
+    (props) => {
+      if (isNaN(Number(minValue))) {
+        setMinError("Nur Zahlen erlaubt!");
+      } else if (Number(minValue) > Number(maxValue)) {
+        setMinError("Kleinste Zahl muss größer als größte Zahl sein!");
+      } else {
+        setMinError(null);
+        if (!isNaN(Number(maxValue))) setMaxError(null);
+      }
+    },
+    [minValue]
+  );
 
   useEffect(() => {
     if (isNaN(Number(maxValue))) {
@@ -77,7 +80,13 @@ const SetDecisionTime = (props) => {
           />
         </View>
       </Overlay>
-      <Pressable onPress={() => setIsOpen(true)}>{props.trigger}</Pressable>
+      <Pressable
+        onPress={() => setIsOpen(true)}
+        disabled={props.disabled}
+        style={{ backgroundColor: props.disabled ? "grey" : null }}
+      >
+        {props.trigger}
+      </Pressable>
     </View>
   );
 };

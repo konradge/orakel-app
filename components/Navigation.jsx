@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -15,106 +15,116 @@ import { setLists } from "../redux/lists";
 import Settings from "./Settings";
 import { showMessage } from "react-native-flash-message";
 import Loader from "./Loader";
+import { useEffect } from "react";
 
-class Navigation extends React.Component {
-  componentDidMount() {
-    this.loadLists();
-  }
-  async loadLists() {
+const Navigation = () => {
+  const [lists, setLists] = useState(null);
+  useEffect(() => {
+    loadLists();
+  }, []);
+  const loadLists = async () => {
     let lists = await loadState();
-    this.props.setLists(lists);
-  }
-  render() {
-    if (this.props.lists == null) {
-      return <Loader />;
-    }
-    const Tab = createBottomTabNavigator();
-    return (
-      <View style={[styles.wrapper, { paddingTop: 0 }]}>
-        <NavigationContainer
-          tabBarOptions={{
-            activeTintColor: "#e91e63",
-          }}
-        >
-          <Tab.Navigator>
-            <Tab.Screen
-              name="JaNein"
-              options={{
-                tabBarLabel: "Ja/Nein",
-                tabBarIcon: ({ focused }) => (
-                  <View style={styles.centeredView}>
-                    <YesNoIcon active={focused} />
-                  </View>
-                ),
-              }}
-              component={YesNo}
-            />
-            <Tab.Screen
-              name="Zahl"
-              options={{
-                tabBarLabel: "Zahl",
-                tabBarIcon: ({ focused }) => (
-                  <Icon
-                    name="dice"
-                    type="font-awesome-5"
-                    color={focused ? "pink" : "gray"}
-                  />
-                ),
-                tabBarInactiveColor: "red",
-              }}
-              component={Number}
-            />
+    console.log(lists);
+    setLists(lists);
+  };
+  const Tab = createBottomTabNavigator();
+  return (
+    <View style={[styles.wrapper, { paddingTop: 0 }]}>
+      <NavigationContainer
+        tabBarOptions={{
+          activeTintColor: "#e91e63",
+        }}
+      >
+        <Tab.Navigator>
+          <Tab.Screen
+            name="JaNein"
+            options={{
+              tabBarLabel: "Ja/Nein",
+              tabBarIcon: ({ focused }) => (
+                <View style={styles.centeredView}>
+                  <YesNoIcon active={focused} />
+                </View>
+              ),
+            }}
+            component={YesNo}
+          />
 
-            <Tab.Screen
-              name="Datum"
-              options={{
-                tabBarLabel: "Datum",
-                tabBarIcon: ({ focused }) => (
-                  <Icon
-                    name="calendar-alt"
-                    type="font-awesome-5"
-                    color={focused ? "purple" : "gray"}
-                  />
-                ),
-              }}
-              component={Date}
-            />
+          <Tab.Screen
+            name="Zahl"
+            options={{
+              tabBarLabel: "Zahl",
+              tabBarIcon: ({ focused }) => (
+                <Icon
+                  name="dice"
+                  type="font-awesome-5"
+                  color={focused ? "pink" : "gray"}
+                />
+              ),
+              tabBarInactiveColor: "red",
+            }}
+            component={Number}
+          />
+          <Tab.Screen
+            name="Datum"
+            options={{
+              tabBarLabel: "Datum",
+              tabBarIcon: ({ focused }) => (
+                <Icon
+                  name="calendar-alt"
+                  type="font-awesome-5"
+                  color={focused ? "purple" : "gray"}
+                />
+              ),
+            }}
+            component={Date}
+          />
 
-            <Tab.Screen
-              name="Eigene"
-              options={{
-                tabBarLabel: "Eigene",
-                tabBarIcon: ({ focused }) => (
-                  <Icon
-                    name="pencil-alt"
-                    type="font-awesome-5"
-                    color={focused ? "blue" : "gray"}
-                  />
-                ),
-              }}
-              component={Custom}
-            />
+          <Tab.Screen
+            name="Eigene"
+            options={{
+              tabBarLabel: "Eigene",
+              tabBarIcon: ({ focused }) => (
+                <Icon
+                  name="pencil-alt"
+                  type="font-awesome-5"
+                  color={
+                    focused
+                      ? "blue"
+                      : lists == null || lists.length === 0
+                      ? "lightgrey"
+                      : "gray"
+                  }
+                />
+              ),
+            }}
+            listeners={{
+              tabPress: (e) => {
+                // Prevent default action
+                if (lists == null || lists.length === 0) e.preventDefault();
+              },
+            }}
+            component={Custom}
+          />
 
-            <Tab.Screen
-              name="Einstellungen"
-              options={{
-                tabBarLabel: "Einstellungen",
-                tabBarIcon: ({ focused }) => (
-                  <Icon
-                    name="cog"
-                    type="font-awesome-5"
-                    color={focused ? "black" : "gray"}
-                  />
-                ),
-              }}
-              component={Settings}
-            />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </View>
-    );
-  }
-}
+          <Tab.Screen
+            name="Einstellungen"
+            options={{
+              tabBarLabel: "Einstellungen",
+              tabBarIcon: ({ focused }) => (
+                <Icon
+                  name="cog"
+                  type="font-awesome-5"
+                  color={focused ? "black" : "gray"}
+                />
+              ),
+            }}
+            component={Settings}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   wrapper: { flex: 1 },
