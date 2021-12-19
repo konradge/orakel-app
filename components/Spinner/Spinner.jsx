@@ -61,6 +61,7 @@ class Spinner extends React.Component {
             style={[styles.hideContainer, { height: this.state.height || 0 }]}
           >
             <Tick
+              decisionTime={this.props.decisionTime}
               elements={this.state.elements}
               height={this.state.height || 0}
               ref={this.tickRef}
@@ -85,7 +86,9 @@ class Spinner extends React.Component {
 }
 
 export default connect(
-  null,
+  ({ settings }) => ({
+    decisionTime: settings.totalDecisionTime,
+  }),
   {
     setCurrentlySpinning,
     resetCurrentlySpinning,

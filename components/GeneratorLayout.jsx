@@ -48,7 +48,9 @@ const GeneratorLayout = (props) => {
     return <Loader />;
   return (
     <View style={styles.container}>
-      <View style={styles.top}>
+      <View
+        style={[styles.top, { opacity: props.currentlySpinning ? 0.3 : 1 }]}
+      >
         {selection}
         <Button
           title="Generate"
@@ -62,7 +64,9 @@ const GeneratorLayout = (props) => {
             const randomComponents = getRandomComponents(
               props.outputComponents,
               startIndex,
-              newEndIndex
+              newEndIndex,
+              props.averageDecisionTime,
+              props.totalDecisionTime
             );
             setElements(randomComponents);
             setEndIndex(newEndIndex);
@@ -75,7 +79,7 @@ const GeneratorLayout = (props) => {
       <View style={styles.bottom}>
         {props.outputComponents.length === 0 ? (
           <View>
-            <Icon name="ban" type="font-awesome" size={80} />
+            <Icon name="ban" type="font-awesome" color="red" />
             <Text
               style={{
                 fontSize: 40,
@@ -134,7 +138,11 @@ const getRandomComponents = (
 };
 
 export default connect(
-  (state) => ({ currentlySpinning: state.currentState.currentlySpinning }),
+  (state) => ({
+    currentlySpinning: state.currentState.currentlySpinning,
+    totalDecisionTime: state.settings.totalDecisionTime,
+    averageDecisionTime: state.settings.averageDecisionTime,
+  }),
   { setCurrentlySpinning, resetCurrentlySpinning }
 )(GeneratorLayout);
 

@@ -3,8 +3,10 @@ import { StyleSheet, View } from "react-native";
 import { Button } from "react-native-elements";
 import Slider from "@react-native-community/slider";
 import { getColor } from "../helpers";
+import { connect } from "react-redux";
 
-export default ({ onValueChange }) => {
+const SliderWithButtons = (props) => {
+  const { onValueChange } = props;
   const [value, setValue] = useState(0.5);
   useEffect(() => {
     onValueChange(value);
@@ -13,10 +15,20 @@ export default ({ onValueChange }) => {
     <View>
       <View>
         <View style={[styles.buttonContainer, styles.twoToOne]}>
-          <Button type="clear" title="2:1" onPress={() => setValue(0.33)} />
+          <Button
+            type="clear"
+            title="2:1"
+            onPress={() => setValue(0.33)}
+            disabled={props.currentlySpinning}
+          />
         </View>
         <View style={[styles.buttonContainer, styles.oneToTwo]}>
-          <Button type="clear" title="1:2" onPress={() => setValue(0.66)} />
+          <Button
+            type="clear"
+            title="1:2"
+            onPress={() => setValue(0.66)}
+            disabled={props.currentlySpinning}
+          />
         </View>
       </View>
       <Slider
@@ -26,21 +38,41 @@ export default ({ onValueChange }) => {
         onValueChange={(value) => {
           setValue(value);
         }}
+        disabled={props.currentlySpinning}
       />
       <View style={styles.bottomButtons}>
         <View style={[styles.buttonContainer, styles.oneToThree]}>
-          <Button type="clear" title="1:3" onPress={() => setValue(0.25)} />
+          <Button
+            type="clear"
+            title="1:3"
+            onPress={() => setValue(0.25)}
+            disabled={props.currentlySpinning}
+          />
         </View>
         <View style={[styles.buttonContainer, styles.oneToOne]}>
-          <Button type="clear" title="1:1" onPress={() => setValue(0.5)} />
+          <Button
+            type="clear"
+            title="1:1"
+            onPress={() => setValue(0.5)}
+            disabled={props.currentlySpinning}
+          />
         </View>
         <View style={[styles.buttonContainer, styles.threeToOne]}>
-          <Button type="clear" title="3:1" onPress={() => setValue(0.75)} />
+          <Button
+            type="clear"
+            title="3:1"
+            onPress={() => setValue(0.75)}
+            disabled={props.currentlySpinning}
+          />
         </View>
       </View>
     </View>
   );
 };
+
+export default connect((state) => ({
+  currentlySpinning: state.currentState.currentlySpinning,
+}))(SliderWithButtons);
 
 const styles = StyleSheet.create({
   buttonContainer: { position: "absolute", alignItems: "center" },

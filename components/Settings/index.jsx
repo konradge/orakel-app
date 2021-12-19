@@ -1,96 +1,59 @@
 import React, { Component } from "react";
-import { Alert, StyleSheet } from "react-native";
-import { Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { Button, Icon } from "react-native-elements";
-import { clear } from "../../redux/store";
-import { connect } from "react-redux";
-import { resetApp } from "../../redux/lists";
-import { showMessage } from "react-native-flash-message";
-import SetDecisionTime from "../SetDecisionTime";
+import SetNumberRange from "./SetNumberRange";
+import DeleteData from "./DeleteData";
+import SetDecisionTime from "./SetDecisionTime";
 class Settings extends Component {
   render() {
     return (
       <View
         style={{ flex: 1, alignItems: "flex-start", justifyContent: "center" }}
       >
-        <Button
-          icon={
-            <Icon
-              name="trash"
-              type="font-awesome-5"
-              size={30}
-              color="red"
-              style={{ paddingRight: 10 }}
-            />
-          }
-          containerStyle={styles.buttonContainer}
-          titleStyle={{ fontSize: 20 }}
-          title="App zurücksetzen"
-          onPress={() => {
-            this.props.resetApp();
-            clear();
-            showMessage({
-              message: "Daten wurden zurückgesetzt",
-              type: "success",
-            });
-            // Alert.alert(
-            //   "Zurücksetzen erfolgreich",
-            //   "Alle Daten wurden zurückgesetzt.",
-            //   [
-            //     {
-            //       text: "OK",
-            //       onPress: () => null,
-            //       style: "ok",
-            //     },
-            //   ]
-            // );
-          }}
+        <DeleteData
+          trigger={<Trigger title="App zurücksetzen" iconName="trash" />}
+        />
+        <SetNumberRange
+          trigger={<Trigger title="Zahlenbereich setzen" iconName="sliders" />}
         />
         <SetDecisionTime
           trigger={
-            <Button
-              disabled={true}
-              disabledStyle={null}
-              icon={
-                <Icon
-                  name="hourglass"
-                  type="font-awesome-5"
-                  size={30}
-                  color="lightgreen"
-                  style={{ paddingRight: 10 }}
-                />
-              }
-              containerStyle={styles.buttonContainer}
-              titleStyle={{ fontSize: 20, textAlign: "left" }}
-              title="Entscheidungszeit verändern"
+            <Trigger
+              title="Entscheidungszeit setzen"
+              iconName="hourglass"
+              lastTrigger
             />
           }
-        />
-        <Button
-          icon={
-            <Icon
-              name="sliders"
-              type="font-awesome"
-              size={30}
-              color="lightgreen"
-              style={{ paddingRight: 10 }}
-            />
-          }
-          containerStyle={styles.buttonContainer}
-          titleStyle={{ fontSize: 20, textAlign: "left" }}
-          title="Zahl: Minimum/Maximum anpassen"
+          iconName="clock"
         />
       </View>
     );
   }
 }
 
-export default connect(
-  (state) => {
-    return {};
-  },
-  { resetApp: resetApp }
-)(Settings);
+const Trigger = ({ title, iconName, lastTrigger }) => {
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        borderColor: "grey",
+        borderWidth: 1,
+        backgroundColor: "lightgrey",
+        padding: 5,
+        margin: 2,
+        width: Dimensions.get("window").width - 4,
+        alignItems: "center",
+      }}
+    >
+      <View style={{ paddingLeft: 10, paddingRight: 10 }}>
+        <Icon name={iconName} type="font-awesome" size={27} />
+      </View>
+      <Text style={{ fontSize: 27 }}>{title}</Text>
+    </View>
+  );
+};
+
+export default Settings;
 
 const styles = StyleSheet.create({
   buttonContainer: { margin: 5, width: "100%" },

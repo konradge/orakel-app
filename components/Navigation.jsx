@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,19 +13,17 @@ import { connect } from "react-redux";
 import { loadState } from "../redux/store";
 import { setLists } from "../redux/lists";
 import Settings from "./Settings";
-import { showMessage } from "react-native-flash-message";
-import Loader from "./Loader";
 import { useEffect } from "react";
+import { setSettings } from "../redux/settings";
 
-const Navigation = () => {
-  const [lists, setLists] = useState(null);
+const Navigation = (props) => {
   useEffect(() => {
     loadLists();
   }, []);
   const loadLists = async () => {
-    let lists = await loadState();
-    console.log(lists);
-    setLists(lists);
+    let state = await loadState();
+    props.setLists(state.lists);
+    props.setSettings(state.settings);
   };
   const Tab = createBottomTabNavigator();
   return (
@@ -48,7 +46,20 @@ const Navigation = () => {
             }}
             component={YesNo}
           />
-
+          <Tab.Screen
+            name="Datum"
+            options={{
+              tabBarLabel: "Datum",
+              tabBarIcon: ({ focused }) => (
+                <Icon
+                  name="calendar-alt"
+                  type="font-awesome-5"
+                  color={focused ? "purple" : "gray"}
+                />
+              ),
+            }}
+            component={Date}
+          />
           <Tab.Screen
             name="Zahl"
             options={{
@@ -65,21 +76,6 @@ const Navigation = () => {
             component={Number}
           />
           <Tab.Screen
-            name="Datum"
-            options={{
-              tabBarLabel: "Datum",
-              tabBarIcon: ({ focused }) => (
-                <Icon
-                  name="calendar-alt"
-                  type="font-awesome-5"
-                  color={focused ? "purple" : "gray"}
-                />
-              ),
-            }}
-            component={Date}
-          />
-
-          <Tab.Screen
             name="Eigene"
             options={{
               tabBarLabel: "Eigene",
@@ -90,7 +86,7 @@ const Navigation = () => {
                   color={
                     focused
                       ? "blue"
-                      : lists == null || lists.length === 0
+                      : props.lists == null || props.lists.length === 0
                       ? "lightgrey"
                       : "gray"
                   }
@@ -100,7 +96,8 @@ const Navigation = () => {
             listeners={{
               tabPress: (e) => {
                 // Prevent default action
-                if (lists == null || lists.length === 0) e.preventDefault();
+                if (props.lists == null || props.lists.length === 0)
+                  e.preventDefault();
               },
             }}
             component={Custom}
@@ -136,5 +133,5 @@ export default connect(
   ({ currentState, lists }) => {
     return { lists };
   },
-  { setLists }
+  { setLists, setSettings }
 )(Navigation);

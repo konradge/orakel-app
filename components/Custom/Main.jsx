@@ -7,8 +7,6 @@ import { setCustomSectionState } from "../../redux/currentState";
 
 class Main extends Component {
   render() {
-    console.log("SELECTED: " + this.props.selectedList);
-    console.log(this.props.lists);
     return (
       <View
         style={{

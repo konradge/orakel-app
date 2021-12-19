@@ -3,7 +3,7 @@ import React, { Component, useEffect, useState } from "react";
 import { Dimensions, Text, View } from "react-native";
 import { Icon, Input } from "react-native-elements";
 import { connect } from "react-redux";
-import SetDecisionTime from "./SetDecisionTime";
+import SetNumberRange from "./Settings/SetNumberRange";
 
 const w = Dimensions.get("window").width;
 
@@ -117,6 +117,7 @@ const SynchronizedSpinnerInput = (props) => {
           onChangeText={setTextMinValue}
           keyboardType="number-pad"
           errorMessage={minError}
+          disabled={props.currentlySpinning}
         />
         <Text
           style={{
@@ -133,9 +134,10 @@ const SynchronizedSpinnerInput = (props) => {
           onChangeText={setTextMaxValue}
           keyboardType="number-pad"
           errorMessage={maxError}
+          disabled={props.currentlySpinning}
         />
       </View>
-      <SetDecisionTime
+      <SetNumberRange
         trigger={
           <Icon
             name="gear"
@@ -161,9 +163,12 @@ const SynchronizedSpinnerInput = (props) => {
           width: 30,
           borderRadius: 30,
         }}
+        disabled={props.currentlySpinning}
       />
     </View>
   );
 };
 
-export default connect()(SynchronizedSpinnerInput);
+export default connect((state) => ({
+  currentlySpinning: state.currentState.currentlySpinning,
+}))(SynchronizedSpinnerInput);

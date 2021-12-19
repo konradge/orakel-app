@@ -11,9 +11,10 @@ const DatePicker = (props) => {
     props.onDateChange(startDate, endDate);
   }, [startDate, endDate]);
   return (
-    <View style={{ opacity: props.disabled ? 0.3 : 1 }}>
+    <View>
       <CalendarPicker
         enableDateChange={!props.disabled}
+        showDayStragglers={true}
         selectedStartDate={startDate}
         selectedEndDate={endDate}
         startFromMonday={true}

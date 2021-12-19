@@ -5,7 +5,6 @@ import GeneratorLayout from "./GeneratorLayout";
 import SynchronizedSpinnerInput from "./SynchronizedSpinnerInput";
 
 let Number = (props) => {
-  console.log("NUMBER MAIN");
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(0);
   return (

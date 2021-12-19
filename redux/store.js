@@ -4,19 +4,21 @@ import redux from "../redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { defaultLists } from "../components/Custom/defaultValues";
 
-const STORE_NAME = "@oracle-app/lists";
+const STORE_NAME = "@oracle-app";
 
 export function prepareStore() {
   const store = createStore(redux);
   store.subscribe(() => {
     saveState({
       lists: store.getState().lists,
+      settings: store.getState().settings,
     });
   });
   store.subscribe(
     throttle(() => {
       saveState({
         lists: store.getState().lists,
+        settings: store.getState().settings,
       });
     }, 1000)
   );
@@ -30,8 +32,7 @@ export const loadState = async () => {
     if (serializedState == null) {
       return defaultLists;
     }
-    const parsed = JSON.parse(serializedState).lists;
-    return JSON.parse(serializedState).lists;
+    return JSON.parse(serializedState);
   } catch (err) {
     console.error(err);
     return undefined;

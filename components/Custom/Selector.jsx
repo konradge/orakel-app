@@ -7,6 +7,9 @@ import {
   Pressable,
   Modal,
   FlatList,
+  TouchableOpacity,
+  Touchable,
+  TouchableHighlight,
 } from "react-native";
 import { Icon, Input } from "react-native-elements";
 import { connect } from "react-redux";
@@ -23,7 +26,6 @@ import { removeList } from "../../redux/lists";
 import { defaultLists } from "./defaultValues";
 import { TextWithIcon } from "../TextWithIcon";
 import { showMessage } from "react-native-flash-message";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 class Selector extends React.Component {
   state = {
@@ -123,14 +125,11 @@ class Selector extends React.Component {
             </View>
           }
           outterContent={
-            <TouchableOpacity
-              disabled={this.props.currentlySpinning}
+            <TouchableHighlight
+              activeOpacity={0.6}
+              underlayColor="#DDDDDD"
               onPress={() => this.setState({ opened: true })}
-              style={({ pressed }) => [
-                {
-                  backgroundColor: pressed ? "rgb(210, 230, 255)" : null,
-                },
-              ]}
+              disabled={this.props.currentlySpinning}
             >
               <View
                 style={{
@@ -154,7 +153,7 @@ class Selector extends React.Component {
                   />
                 </Text>
               </View>
-            </TouchableOpacity>
+            </TouchableHighlight>
           }
         ></MyModal>
       </View>

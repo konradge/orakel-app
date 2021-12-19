@@ -1,11 +1,18 @@
 import React, { Component, useEffect } from "react";
 import { useState } from "react";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
-import { Button, Input, Overlay } from "react-native-elements";
+import {
+  Pressable,
+  View,
+  Button,
+  TouchableHighlight,
+  Dimensions,
+} from "react-native";
+import { Input, Overlay } from "react-native-elements";
+import { showMessage } from "react-native-flash-message";
 import { connect } from "react-redux";
-import { setNumberRange } from "../redux/settings";
+import { setNumberRange } from "../../redux/settings";
 
-const SetDecisionTime = (props) => {
+const SetNumberRange = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [minValue, setMinValue] = useState(`${props.minValue}`);
   const [minError, setMinError] = useState(null);
@@ -69,24 +76,47 @@ const SetDecisionTime = (props) => {
             onChangeText={setMaxValue}
             keyboardType="numeric"
           />
-          <Button
-            title="Save"
-            color="green"
-            disabled={minError || maxError}
-            onPress={() => {
-              props.setNumberRange(minValue, maxValue);
-              setIsOpen(false);
+          <View
+            style={{
+              flexDirection: "row",
+              width: Dimensions.get("window").width,
+              justifyContent: "space-evenly",
             }}
-          />
+          >
+            <Button
+              title="Abbrechen"
+              color="red"
+              buttonStyle={{ backgroundColor: "red" }}
+              titleStyle={{ fontSize: 30 }}
+              onPress={() => {
+                setMinValue(`${props.minValue}`);
+                setMaxValue(`${props.maxValue}`);
+                setIsOpen(false);
+              }}
+            />
+            <Button
+              title="Speichern"
+              color="green"
+              disabled={minError || maxError}
+              onPress={() => {
+                showMessage({
+                  message: "Zahlenbereich wurde erfolgreich verändert",
+                  type: "success",
+                });
+                props.setNumberRange(minValue, maxValue);
+                setIsOpen(false);
+              }}
+            />
+          </View>
         </View>
       </Overlay>
-      <Pressable
+      <TouchableHighlight
         onPress={() => setIsOpen(true)}
-        disabled={props.disabled}
+        disabled={props.currentlySpinning}
         style={{ backgroundColor: props.disabled ? "grey" : null }}
       >
         {props.trigger}
-      </Pressable>
+      </TouchableHighlight>
     </View>
   );
 };
@@ -96,7 +126,8 @@ export default connect(
     return {
       minValue: state.settings.minNumber,
       maxValue: state.settings.maxNumber,
+      currentlySpinning: state.currentState.currentlySpinning,
     };
   },
   { setNumberRange }
-)(SetDecisionTime);
+)(SetNumberRange);

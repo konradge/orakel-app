@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 import GeneratorLayout from "./GeneratorLayout";
 import SliderWithButtons from "./SliderWithButtons";
 
@@ -17,7 +18,14 @@ const YesNo = (props) => {
       selection={
         <View style={styles.selectionContainer}>
           <View style={styles.yesNoContainer}>
-            <Text style={styles.yesText}>Ja</Text>
+            <Text
+              style={[
+                styles.yesText,
+                { color: props.currentlySpinning ? "grey" : "green" },
+              ]}
+            >
+              Ja
+            </Text>
           </View>
           <View style={styles.sliderContainer}>
             <SliderWithButtons onValueChange={setSliderValue} />
@@ -44,6 +52,11 @@ generateOutputComponent = (value, index) => {
 };
 
 export default YesNo;
+
+// Wenn man dies verwendet, funktioniert der Spinner aus Gründen nicht
+// export default connect((state) => ({
+//   xyz: state.currentState.currentlySpinning,
+// }))(YesNo);
 
 const styles = StyleSheet.create({
   selectionContainer: { width: "100%", flexDirection: "row" },
