@@ -3,10 +3,11 @@
     "name": "Orakel",
     "slug": "orakel-app",
     "version": "1.0.0",
+    "privacy": "public",
     "orientation": "portrait",
-    "icon": "./assets/orakel-logo.png",
+    "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/orakel-logo.png",
+      "image": "./assets/splash-screen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/orakel-logo.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.geller.orakelapp",
