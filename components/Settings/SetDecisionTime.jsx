@@ -17,8 +17,6 @@ import {
 } from "../../redux/settings";
 
 const SetDecisionTime = (props) => {
-  console.log("THE PROPS:");
-  console.log(props.time.total);
   const [isOpen, setIsOpen] = useState(false);
   const [totalTime, setTotalTime] = useState(`${props.time.total}`);
   const [totalTimeError, setTotalTimeError] = useState(null);
@@ -124,7 +122,6 @@ const SetDecisionTime = (props) => {
 
 export default connect(
   (state) => {
-    console.log(state.settings);
     return {
       time: {
         total: state.settings.totalDecisionTime,

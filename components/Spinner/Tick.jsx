@@ -19,8 +19,6 @@ class Tick extends React.Component {
   }
 
   restartAnimation() {
-    console.log("AVG:");
-    console.log(this.props.averageTime);
     this.setState(
       {
         animation: new Animated.Value(getPosition(0, this.props.height)),

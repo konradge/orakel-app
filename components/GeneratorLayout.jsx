@@ -53,9 +53,9 @@ const GeneratorLayout = (props) => {
       >
         {selection}
         <Button
-          title="Generate"
+          title="Frag das Orakel"
           type="outline"
-          titleStyle={{ fontSize: 50 }}
+          titleStyle={{ fontSize: 40 }}
           onPress={() => {
             props.setCurrentlySpinning();
             if (onGenerateButtonPress) onGenerateButtonPress();
@@ -79,7 +79,7 @@ const GeneratorLayout = (props) => {
       <View style={styles.bottom}>
         {props.outputComponents.length === 0 ? (
           <View>
-            <Icon name="ban" type="font-awesome" color="red" />
+            <Icon name="ban" type="font-awesome" color="red" size={100} />
             <Text
               style={{
                 fontSize: 40,

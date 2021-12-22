@@ -1,18 +1,54 @@
 import React, { Component } from "react";
-import { FlatList, StyleSheet, Text, View, TextInput } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import { STATES } from "../../constants";
 import { setCustomSectionState } from "../../redux/currentState";
 import { setList } from "../../redux/lists";
-import { Button, Icon, Input } from "react-native-elements";
+import { Button, Icon, Input, Text } from "react-native-elements";
 import { TextWithIcon } from "../TextWithIcon";
+import ConfirmationModal from "../ConfirmationModal";
 
 class EditEntry extends Component {
-  state = { listInputValues: this.props.list, addItemValue: "" };
+  state = {
+    listInputValues: this.props.list,
+    addItemValue: "",
+    overlayVisible: false,
+  };
+
+  saveAndClose(addedItem) {
+    if (addedItem)
+      this.props.setList(this.props.selectedList, [
+        ...this.state.listInputValues,
+        addedItem,
+      ]);
+    else
+      this.props.setList(this.props.selectedList, this.state.listInputValues);
+    this.props.close();
+    this.setState({ overlayVisible: false });
+  }
+
   render() {
     const { title } = this.props;
     return (
       <View style={styles.container}>
+        <ConfirmationModal
+          close={() => this.setState({ overlayVisible: false })}
+          description={
+            <View>
+              <Text h4>Es gibt noch Änderungen!</Text>
+              <Text>
+                Möchtest du den Eintrag{" "}
+                <Text style={{ color: "blue" }}>{this.state.addItemValue}</Text>{" "}
+                vor dem Speichern zur Liste hinzufügen?
+              </Text>
+            </View>
+          }
+          confirmText="Ja und speichern"
+          rejectText="Nein, direkt speichern"
+          visible={this.state.overlayVisible}
+          confirmAction={() => this.saveAndClose(this.state.addItemValue)}
+          rejectAction={() => this.saveAndClose()}
+        />
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
@@ -105,11 +141,11 @@ class EditEntry extends Component {
             size={50}
             reverse
             onPress={() => {
-              this.props.setList(
-                this.props.selectedList,
-                this.state.listInputValues
-              );
-              this.props.close();
+              if (this.state.addItemValue) {
+                this.setState({ overlayVisible: true });
+              } else {
+                this.saveAndClose();
+              }
             }}
           />
           <Icon
